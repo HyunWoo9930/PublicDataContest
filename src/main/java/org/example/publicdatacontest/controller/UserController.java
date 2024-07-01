@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class UserController {
 
-    @GetMapping("/testd")
+    @GetMapping("/test")
     public ResponseEntity<?> getTest() {
         return ResponseEntity.ok("test success");
     }
