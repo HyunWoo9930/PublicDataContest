@@ -9,6 +9,6 @@ public class UserController {
 
     @GetMapping("/test")
     public ResponseEntity<?> getTest() {
-        return ResponseEntity.ok("test success");
+        return ResponseEntity.ok("test success!!");
     }
 }
