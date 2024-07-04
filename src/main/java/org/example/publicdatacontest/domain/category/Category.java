@@ -10,11 +10,11 @@ import java.util.Set;
 @Getter
 @Setter
 public class Category {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long categoryId;
-    private String name;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long categoryId;
+	private String name;
 
-    @OneToMany(mappedBy = "category")
-    private Set<SubCategory> subCategories;
+	@OneToMany(mappedBy = "category")
+	private Set<SubCategory> subCategories;
 }

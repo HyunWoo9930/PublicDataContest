@@ -10,18 +10,18 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class Chat {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long messageId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long messageId;
 
-    @ManyToOne
-    @JoinColumn(name = "conversation_id")
-    private Conversation conversation;
+	@ManyToOne
+	@JoinColumn(name = "conversation_id")
+	private Conversation conversation;
 
-    private Long senderId;
-    private String senderType;
-    private Long receiverId;
-    private String receiverType;
-    private String content;
-    private LocalDateTime timestamp;
+	private Long senderId;
+	private String senderType;
+	private Long receiverId;
+	private String receiverType;
+	private String content;
+	private LocalDateTime timestamp;
 }
