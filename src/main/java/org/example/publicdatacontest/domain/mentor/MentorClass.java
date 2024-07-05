@@ -1,6 +1,8 @@
 package org.example.publicdatacontest.domain.mentor;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import org.example.publicdatacontest.domain.category.SubCategory;
 import org.example.publicdatacontest.domain.mentee.MenteeClass;
@@ -9,6 +11,8 @@ import org.example.publicdatacontest.domain.util.Review;
 import java.util.Set;
 
 @Entity
+@Getter
+@Setter
 public class MentorClass {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,6 +39,4 @@ public class MentorClass {
 
 	@OneToMany(mappedBy = "mentorClass")
 	private Set<Review> reviews;
-
-	// Getters and setters
 }

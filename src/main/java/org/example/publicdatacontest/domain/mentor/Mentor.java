@@ -17,7 +17,7 @@ public class Mentor {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long mentorId;
-	private String id;
+	private String userId;
 	private String password;
 	private String mentorName;
 	private String gender;

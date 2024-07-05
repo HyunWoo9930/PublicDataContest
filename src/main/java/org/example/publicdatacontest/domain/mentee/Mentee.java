@@ -17,9 +17,9 @@ public class Mentee {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long menteeId;
-	private String id;
+	private String userId;
 	private String password;
-	private String name;
+	private String menteeName;
 	private String gender;
 	private String birth;
 	private String email;

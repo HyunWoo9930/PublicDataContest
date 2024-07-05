@@ -1,6 +1,8 @@
 package org.example.publicdatacontest.domain.mentee;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import org.example.publicdatacontest.domain.mentee.Mentee;
 import org.example.publicdatacontest.domain.mentee.MenteeClassId;
@@ -9,6 +11,8 @@ import org.example.publicdatacontest.domain.mentor.MentorClass;
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
+@Setter
 @IdClass(MenteeClassId.class)
 public class MenteeClass {
 	@Id
@@ -30,6 +34,4 @@ public class MenteeClass {
 	private Long count;
 	private Long usedCount;
 	private LocalDateTime timestamp;
-
-	// Getters and setters
 }
