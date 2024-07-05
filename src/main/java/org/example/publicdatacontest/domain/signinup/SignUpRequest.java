@@ -1,5 +1,7 @@
 package org.example.publicdatacontest.domain.signinup;
 
+import java.time.LocalDate;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -28,7 +30,7 @@ public class SignUpRequest {
 
 	@NotBlank
 	@Size(max = 10)
-	private String birth;
+	private LocalDate birth;
 
 	@NotBlank
 	@Email
