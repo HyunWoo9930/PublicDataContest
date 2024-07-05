@@ -13,7 +13,6 @@ import org.example.publicdatacontest.jwt.JwtTokenProvider;
 import org.example.publicdatacontest.repository.mentee.MenteeRepository;
 import org.example.publicdatacontest.repository.mentor.MentorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -25,7 +24,6 @@ import org.webjars.NotFoundException;
 
 @Service
 public class AuthService {
-
 
 	@Autowired
 	AuthenticationManager authenticationManager;
@@ -57,7 +55,8 @@ public class AuthService {
 	}
 
 	public String registerMentor(SignUpRequest signUpRequest) {
-		if (mentorRepository.existsByUserId(signUpRequest.getUserId())) {
+		if (mentorRepository.existsByUserId(signUpRequest.getUserId()) | menteeRepository.existsByUserId(
+			signUpRequest.getUserId())) {
 			throw new RuntimeException("Username is already taken!");
 		}
 
@@ -79,7 +78,8 @@ public class AuthService {
 	}
 
 	public String registerMentee(SignUpRequest signUpRequest) {
-		if (menteeRepository.existsByUserId(signUpRequest.getUserId())) {
+		if (menteeRepository.existsByUserId(signUpRequest.getUserId()) | mentorRepository.existsByUserId(
+			signUpRequest.getUserId())) {
 			throw new RuntimeException("Username is already taken!");
 		}
 
@@ -103,14 +103,13 @@ public class AuthService {
 	public Object getInfo(UserDetails userDetails) {
 		String username = userDetails.getUsername();
 		Optional<Mentor> mentor = mentorRepository.findByUserId(username);
-		if(mentor.isPresent()) {
+		if (mentor.isPresent()) {
 			return new MentorInfoResponse(mentor.get(), "mentor");
 		} else {
 			Optional<Mentee> mentee = menteeRepository.findByUserId(username);
-			if(mentee.isPresent()) {
+			if (mentee.isPresent()) {
 				return new MenteeInfoResponse(mentee.get(), "mentee");
-			}
-			else {
+			} else {
 				throw new NotFoundException("user not found");
 			}
 		}
