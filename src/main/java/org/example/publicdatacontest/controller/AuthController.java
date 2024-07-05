@@ -1,27 +1,22 @@
 package org.example.publicdatacontest.controller;
 
-import org.example.publicdatacontest.domain.mentee.Mentee;
-import org.example.publicdatacontest.domain.mentor.Mentor;
-import org.example.publicdatacontest.jwt.JwtAuthenticationResponse;
-import org.example.publicdatacontest.jwt.JwtTokenProvider;
 import org.example.publicdatacontest.domain.signinup.LoginRequest;
 import org.example.publicdatacontest.domain.signinup.SignUpRequest;
-import org.example.publicdatacontest.repository.mentee.MenteeRepository;
-import org.example.publicdatacontest.repository.mentor.MentorRepository;
+import org.example.publicdatacontest.jwt.JwtAuthenticationResponse;
+import org.example.publicdatacontest.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.webjars.NotFoundException;
 
 import jakarta.validation.Valid;
 
@@ -31,85 +26,42 @@ import jakarta.validation.Valid;
 public class AuthController {
 
 	@Autowired
-	AuthenticationManager authenticationManager;
-
-	@Autowired
-	MentorRepository mentorRepository;
-
-	@Autowired
-	MenteeRepository menteeRepository;
-
-	@Autowired
-	PasswordEncoder passwordEncoder;
-
-	@Autowired
-	JwtTokenProvider tokenProvider;
+	AuthService authService;
 
 	@PostMapping("/signin")
 	public JwtAuthenticationResponse authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+		return authService.authenticateUser(loginRequest);
 
-		Authentication authentication = authenticationManager.authenticate(
-			new UsernamePasswordAuthenticationToken(
-				loginRequest.getUsername(),
-				loginRequest.getPassword()
-			)
-		);
-
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-
-		String jwt = tokenProvider.generateToken(authentication.getName());
-		return new JwtAuthenticationResponse(jwt);
 	}
 
 	@PostMapping("/signup/mentor")
-	public String registerMentor(@Valid @RequestBody SignUpRequest signUpRequest) {
-		if (mentorRepository.existsByUserId(signUpRequest.getUserId())) {
-			return "Username is already taken!";
+	public ResponseEntity<?> registerMentor(@Valid @RequestBody SignUpRequest signUpRequest) {
+		try {
+			String registered = authService.registerMentor(signUpRequest);
+			return ResponseEntity.ok(registered);
+		} catch (RuntimeException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		}
-
-		Mentor mentor = new Mentor();
-		mentor.setUserId(signUpRequest.getUserId());
-		mentor.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
-		mentor.setMentorName(signUpRequest.getName());
-		mentor.setAddress(signUpRequest.getAddress());
-		mentor.setEmail(signUpRequest.getEmail());
-		mentor.setBirth(signUpRequest.getBirth());
-		mentor.setGender(signUpRequest.getGender());
-		mentor.setIsEmailAlarmAgreed(signUpRequest.getIsEmailAlarmAgreed());
-		mentor.setReemploymentIdea(signUpRequest.getEmploymentIdea());
-		mentor.setPhoneNumber(signUpRequest.getPhoneNumber());
-
-		mentorRepository.save(mentor);
-
-		return "User registered successfully";
 	}
 
 	@PostMapping("/signup/mentee")
-	public String registerMentee(@Valid @RequestBody SignUpRequest signUpRequest) {
-		if (menteeRepository.existsByUserId(signUpRequest.getUserId())) {
-			return "Username is already taken!";
+	public ResponseEntity<?> registerMentee(@Valid @RequestBody SignUpRequest signUpRequest) {
+		try {
+			String registered = authService.registerMentee(signUpRequest);
+			return ResponseEntity.ok(registered);
+		} catch (RuntimeException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		}
-
-		Mentee mentee = new Mentee();
-		mentee.setUserId(signUpRequest.getUserId());
-		mentee.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
-		mentee.setMenteeName(signUpRequest.getName());
-		mentee.setAddress(signUpRequest.getAddress());
-		mentee.setEmail(signUpRequest.getEmail());
-		mentee.setBirth(signUpRequest.getBirth());
-		mentee.setGender(signUpRequest.getGender());
-		mentee.setIsEmailAlarmAgreed(signUpRequest.getIsEmailAlarmAgreed());
-		mentee.setEmploymentIdea(signUpRequest.getEmploymentIdea());
-		mentee.setPhoneNumber(signUpRequest.getPhoneNumber());
-
-		menteeRepository.save(mentee);
-
-		return "User registered successfully";
 	}
 
-	@GetMapping("/getMentorInfo")
-	public Mentor getMentorInfo(@AuthenticationPrincipal UserDetails userDetails) {
-		String username = userDetails.getUsername();
-		return mentorRepository.findByUserId(username).orElseThrow(() -> new RuntimeException("User not found"));
+	@GetMapping("/getInfo")
+	public ResponseEntity<?> getInfo(@AuthenticationPrincipal UserDetails userDetails) {
+		try {
+			Object info = authService.getInfo(userDetails);
+			System.out.println("info = " + info);
+			return ResponseEntity.ok(info);
+		} catch (NotFoundException | UsernameNotFoundException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}
 	}
 }
