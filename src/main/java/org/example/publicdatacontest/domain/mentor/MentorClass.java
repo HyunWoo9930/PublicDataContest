@@ -7,12 +7,16 @@ import lombok.Setter;
 import org.example.publicdatacontest.domain.category.SubCategory;
 import org.example.publicdatacontest.domain.mentee.MenteeClass;
 import org.example.publicdatacontest.domain.util.Review;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
 @Getter
 @Setter
+@EntityListeners(AuditingEntityListener.class)
 public class MentorClass {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,4 +43,8 @@ public class MentorClass {
 
 	@OneToMany(mappedBy = "mentorClass")
 	private Set<Review> reviews;
+
+	@CreatedDate
+	@Column(updatable = false)
+	private LocalDateTime createdAt;
 }

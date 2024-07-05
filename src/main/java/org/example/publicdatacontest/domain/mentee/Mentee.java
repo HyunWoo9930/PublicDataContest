@@ -11,13 +11,17 @@ import lombok.Setter;
 import org.example.publicdatacontest.domain.chat.Conversation;
 import org.example.publicdatacontest.domain.util.Reports;
 import org.example.publicdatacontest.domain.util.Review;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
 @Getter
 @Setter
+@EntityListeners(AuditingEntityListener.class)
 public class Mentee {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,6 +47,10 @@ public class Mentee {
 	private Boolean employmentIdea;
 	private Boolean active;
 	private Boolean isEmailAlarmAgreed;
+
+	@CreatedDate
+	@Column(updatable = false)
+	private LocalDateTime createdAt;
 
 	@OneToMany(mappedBy = "mentee")
 	private Set<Reports> reports;

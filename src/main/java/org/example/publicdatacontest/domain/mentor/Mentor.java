@@ -10,14 +10,18 @@ import lombok.Setter;
 
 import org.example.publicdatacontest.domain.chat.Conversation;
 import org.example.publicdatacontest.domain.util.Reports;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
 @Getter
 @Setter
 @Table
+@EntityListeners(AuditingEntityListener.class)
 public class Mentor {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,6 +49,10 @@ public class Mentor {
 	private Boolean reemploymentIdea;
 	private Boolean active;
 	private Boolean isEmailAlarmAgreed;
+
+	@CreatedDate
+	@Column(updatable = false)
+	private LocalDateTime createdAt;
 
 	@OneToMany(mappedBy = "mentor")
 	private Set<MentorCertificate> certificates;
