@@ -78,7 +78,12 @@ public class AuthService {
 
 		mentorRepository.save(mentor);
 
-		return "User registered successfully";
+		Optional<Mentor> mentor1 = mentorRepository.findByUserId(signUpRequest.getUserId());
+		if(mentor1.isPresent()) {
+			return "User registered successfully";
+		} else {
+			throw new RuntimeException("User registered Failed");
+		}
 	}
 
 	@Transactional
@@ -102,7 +107,12 @@ public class AuthService {
 
 		menteeRepository.save(mentee);
 
-		return "User registered successfully";
+		Optional<Mentee> byUserId = menteeRepository.findByUserId(signUpRequest.getUserId());
+		if(byUserId.isPresent()) {
+			return "User registered successfully";
+		} else {
+			throw new RuntimeException("User registered Failed");
+		}
 	}
 
 	public Object getInfo(UserDetails userDetails) {
