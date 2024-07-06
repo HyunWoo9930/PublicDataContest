@@ -37,6 +37,7 @@ public class SecurityConfig {
 			.sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(unauthorizedHandler))
 			.authorizeHttpRequests(authorizeRequests -> authorizeRequests
+				.requestMatchers("/", "/**").permitAll()
 				.requestMatchers("/api/auth/**").permitAll()
 				.requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()  // Swagger URL 허용
 				.anyRequest().authenticated()
