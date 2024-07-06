@@ -22,6 +22,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class AuthService {
 
@@ -54,6 +56,7 @@ public class AuthService {
 		return new JwtAuthenticationResponse(jwt);
 	}
 
+	@Transactional
 	public String registerMentor(SignUpRequest signUpRequest) {
 		if (mentorRepository.existsByUserId(signUpRequest.getUserId()) | menteeRepository.existsByUserId(
 			signUpRequest.getUserId())) {
@@ -77,6 +80,7 @@ public class AuthService {
 		return "User registered successfully";
 	}
 
+	@Transactional
 	public String registerMentee(SignUpRequest signUpRequest) {
 		if (menteeRepository.existsByUserId(signUpRequest.getUserId()) | mentorRepository.existsByUserId(
 			signUpRequest.getUserId())) {
