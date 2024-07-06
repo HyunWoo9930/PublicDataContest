@@ -6,7 +6,6 @@ import org.example.publicdatacontest.domain.mentee.Mentee;
 import org.example.publicdatacontest.domain.mentor.Mentor;
 import org.example.publicdatacontest.domain.signinup.LoginRequest;
 import org.example.publicdatacontest.domain.signinup.SignUpRequest;
-import org.example.publicdatacontest.jwt.JwtAuthenticationResponse;
 import org.example.publicdatacontest.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,9 +32,12 @@ public class AuthController {
 	AuthService authService;
 
 	@PostMapping("/signin")
-	public JwtAuthenticationResponse authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-		return authService.authenticateUser(loginRequest);
-
+	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+		try {
+			return ResponseEntity.ok(authService.authenticateUser(loginRequest));
+		} catch (NotFoundException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}
 	}
 
 	@PostMapping("/signup/mentor")
