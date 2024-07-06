@@ -1,5 +1,6 @@
 package org.example.publicdatacontest.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.example.publicdatacontest.domain.mentee.Mentee;
@@ -117,5 +118,13 @@ public class AuthService {
 				throw new NotFoundException("user not found");
 			}
 		}
+	}
+
+	public List<Mentor> getAllMentorInfo(UserDetails userDetails) {
+		return mentorRepository.findAll();
+	}
+
+	public List<Mentee> getAllMenteeInfo(UserDetails userDetails) {
+		return menteeRepository.findAll();
 	}
 }

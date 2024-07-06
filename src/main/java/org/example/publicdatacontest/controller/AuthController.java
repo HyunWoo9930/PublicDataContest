@@ -1,5 +1,9 @@
 package org.example.publicdatacontest.controller;
 
+import java.util.List;
+
+import org.example.publicdatacontest.domain.mentee.Mentee;
+import org.example.publicdatacontest.domain.mentor.Mentor;
 import org.example.publicdatacontest.domain.signinup.LoginRequest;
 import org.example.publicdatacontest.domain.signinup.SignUpRequest;
 import org.example.publicdatacontest.jwt.JwtAuthenticationResponse;
@@ -63,5 +67,17 @@ public class AuthController {
 		} catch (NotFoundException | UsernameNotFoundException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		}
+	}
+
+	@GetMapping("/getAllMentorInfo")
+	public ResponseEntity<?> getAllMentorInfo(@AuthenticationPrincipal UserDetails userDetails) {
+		List<Mentor> allMentorInfo = authService.getAllMentorInfo(userDetails);
+		return ResponseEntity.ok(allMentorInfo);
+	}
+
+	@GetMapping("/getAllMenteeInfo")
+	public ResponseEntity<?> getAlMenteeInfo(@AuthenticationPrincipal UserDetails userDetails) {
+		List<Mentee> allMenteeInfo = authService.getAllMenteeInfo(userDetails);
+		return ResponseEntity.ok(allMenteeInfo);
 	}
 }
