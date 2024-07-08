@@ -1,14 +1,27 @@
 package org.example.publicdatacontest.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.example.publicdatacontest.domain.chat.Conversation;
 import org.example.publicdatacontest.domain.mentee.Mentee;
+import org.example.publicdatacontest.domain.mentee.MenteeCategory;
+import org.example.publicdatacontest.domain.mentee.MenteeClass;
+import org.example.publicdatacontest.domain.mentee.MenteeDTO;
 import org.example.publicdatacontest.domain.mentee.MenteeInfoResponse;
 import org.example.publicdatacontest.domain.mentor.Mentor;
+import org.example.publicdatacontest.domain.mentor.MentorBadge;
+import org.example.publicdatacontest.domain.mentor.MentorCategory;
+import org.example.publicdatacontest.domain.mentor.MentorCertificate;
+import org.example.publicdatacontest.domain.mentor.MentorClass;
+import org.example.publicdatacontest.domain.mentor.MentorDTO;
 import org.example.publicdatacontest.domain.mentor.MentorInfoResponse;
 import org.example.publicdatacontest.domain.signinup.LoginRequest;
 import org.example.publicdatacontest.domain.signinup.SignUpRequest;
+import org.example.publicdatacontest.domain.util.Reports;
+import org.example.publicdatacontest.domain.util.Review;
 import org.example.publicdatacontest.jwt.JwtAuthenticationResponse;
 import org.example.publicdatacontest.jwt.JwtTokenProvider;
 import org.example.publicdatacontest.repository.mentee.MenteeRepository;
@@ -59,7 +72,7 @@ public class AuthService {
 			return new JwtAuthenticationResponse(jwt, "mentee");
 		} else {
 			Optional<Mentor> mentor = mentorRepository.findByUserId(loginRequest.getUsername());
-			if(mentor.isPresent()) {
+			if (mentor.isPresent()) {
 				return new JwtAuthenticationResponse(jwt, "mentor");
 			} else {
 				throw new NotFoundException("User Not Found");
@@ -89,7 +102,7 @@ public class AuthService {
 		mentorRepository.save(mentor);
 
 		Optional<Mentor> mentor1 = mentorRepository.findByUserId(signUpRequest.getUserId());
-		if(mentor1.isPresent()) {
+		if (mentor1.isPresent()) {
 			return "User registered successfully";
 		} else {
 			throw new RuntimeException("User registered Failed");
@@ -118,7 +131,7 @@ public class AuthService {
 		menteeRepository.save(mentee);
 
 		Optional<Mentee> byUserId = menteeRepository.findByUserId(signUpRequest.getUserId());
-		if(byUserId.isPresent()) {
+		if (byUserId.isPresent()) {
 			return "User registered successfully";
 		} else {
 			throw new RuntimeException("User registered Failed");
@@ -129,22 +142,92 @@ public class AuthService {
 		String username = userDetails.getUsername();
 		Optional<Mentor> mentor = mentorRepository.findByUserId(username);
 		if (mentor.isPresent()) {
-			return new MentorInfoResponse(mentor.get(), "mentor");
+			return new MentorInfoResponse(convertToDTO(mentor.get()), "mentor");
 		} else {
 			Optional<Mentee> mentee = menteeRepository.findByUserId(username);
 			if (mentee.isPresent()) {
-				return new MenteeInfoResponse(mentee.get(), "mentee");
+				return new MenteeInfoResponse(convertToDTO(mentee.get()), "mentee");
 			} else {
 				throw new NotFoundException("user not found");
 			}
 		}
 	}
 
-	public List<Mentor> getAllMentorInfo(UserDetails userDetails) {
-		return mentorRepository.findAll();
+	public List<MentorDTO> getAllMentorInfo() {
+		return mentorRepository.findAll().stream()
+			.map(this::convertToDTO)
+			.collect(Collectors.toList());
 	}
 
-	public List<Mentee> getAllMenteeInfo(UserDetails userDetails) {
-		return menteeRepository.findAll();
+	public List<MenteeDTO> getAllMenteeInfo() {
+		return menteeRepository.findAll().stream()
+			.map(this::convertToDTO)
+			.collect(Collectors.toList());
+	}
+
+	public MentorDTO getMentorById(Long id) {
+		Mentor mentor = mentorRepository.findById(id).orElseThrow(() -> new NotFoundException("Mentor not found"));
+		return convertToDTO(mentor);
+	}
+
+	private MentorDTO convertToDTO(Mentor mentor) {
+		MentorDTO dto = new MentorDTO();
+		dto.setMentorId(mentor.getMentorId());
+		dto.setUserId(mentor.getUserId());
+		dto.setMentorName(mentor.getMentorName());
+		dto.setGender(mentor.getGender());
+		dto.setBirth(mentor.getBirth());
+		dto.setEmail(mentor.getEmail());
+		dto.setPhoneNumber(mentor.getPhoneNumber());
+		dto.setAddress(mentor.getAddress());
+		dto.setMentoringCount(mentor.getMentoringCount());
+		dto.setStudentCount(mentor.getStudentCount());
+		dto.setReemploymentIdea(mentor.getReemploymentIdea());
+		dto.setActive(mentor.getActive());
+		dto.setIsEmailAlarmAgreed(mentor.getIsEmailAlarmAgreed());
+		dto.setCreatedAt(mentor.getCreatedAt());
+
+		dto.setCertificateIds(mentor.getCertificates().stream().map(MentorCertificate::getCertificateId).collect(
+			Collectors.toSet()));
+		dto.setBadgeIds(mentor.getBadges().stream().map(MentorBadge::getBadgeId).collect(Collectors.toSet()));
+		dto.setMentorClassIds(
+			mentor.getMentorClasses().stream().map(MentorClass::getClassId).collect(Collectors.toSet()));
+		dto.setReportIds(mentor.getReports().stream().map(Reports::getReportId).collect(Collectors.toSet()));
+		dto.setConversationIds(
+			mentor.getConversations().stream().map(Conversation::getConversationId).collect(Collectors.toSet()));
+		dto.setMentorCategoryIds(
+			mentor.getMentorCategories().stream().map(MentorCategory::getSubCategoryId).collect(Collectors.toSet()));
+
+		return dto;
+	}
+
+	public MenteeDTO getMenteeById(Long id) {
+		Mentee mentee = menteeRepository.findById(id).orElseThrow(() -> new NotFoundException("Mentee not found"));
+		return convertToDTO(mentee);
+	}
+
+	private MenteeDTO convertToDTO(Mentee mentee) {
+		MenteeDTO dto = new MenteeDTO();
+		dto.setMenteeId(mentee.getMenteeId());
+		dto.setUserId(mentee.getUserId());
+		dto.setMenteeName(mentee.getMenteeName());
+		dto.setGender(mentee.getGender());
+		dto.setBirth(mentee.getBirth());
+		dto.setEmail(mentee.getEmail());
+		dto.setPhoneNumber(mentee.getPhoneNumber());
+		dto.setAddress(mentee.getAddress());
+		dto.setEmploymentIdea(mentee.getEmploymentIdea());
+		dto.setActive(mentee.getActive());
+		dto.setIsEmailAlarmAgreed(mentee.getIsEmailAlarmAgreed());
+		dto.setCreatedAt(mentee.getCreatedAt());
+
+		dto.setReportIds(mentee.getReports().stream().map(Reports::getReportId).collect(Collectors.toSet()));
+		dto.setConversationIds(mentee.getConversations().stream().map(Conversation::getConversationId).collect(Collectors.toSet()));
+		dto.setMenteeClassIds(mentee.getMenteeClasses().stream().map(MenteeClass::getClassId).collect(Collectors.toSet()));
+		dto.setMenteeCategoryIds(
+			mentee.getMenteeCategories().stream().map(MenteeCategory::getSubCategoryId).collect(Collectors.toSet()));
+		dto.setReviewIds(mentee.getReviews().stream().map(Review::getReviewId).collect(Collectors.toSet()));
+
+		return dto;
 	}
 }

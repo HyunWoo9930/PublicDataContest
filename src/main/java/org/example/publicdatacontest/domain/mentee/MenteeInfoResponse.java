@@ -6,11 +6,11 @@ import lombok.Setter;
 @Setter
 @Getter
 public class MenteeInfoResponse {
-	private Mentee mentee;
+	private MenteeDTO mentee;
 
 	private String role;
 
-	public MenteeInfoResponse(Mentee mentee, String role) {
+	public MenteeInfoResponse(MenteeDTO mentee, String role) {
 		this.mentee = mentee;
 		this.role = role;
 	}

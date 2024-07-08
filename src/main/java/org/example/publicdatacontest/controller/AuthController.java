@@ -3,7 +3,9 @@ package org.example.publicdatacontest.controller;
 import java.util.List;
 
 import org.example.publicdatacontest.domain.mentee.Mentee;
+import org.example.publicdatacontest.domain.mentee.MenteeDTO;
 import org.example.publicdatacontest.domain.mentor.Mentor;
+import org.example.publicdatacontest.domain.mentor.MentorDTO;
 import org.example.publicdatacontest.domain.signinup.LoginRequest;
 import org.example.publicdatacontest.domain.signinup.SignUpRequest;
 import org.example.publicdatacontest.service.AuthService;
@@ -64,7 +66,6 @@ public class AuthController {
 	public ResponseEntity<?> getInfo(@AuthenticationPrincipal UserDetails userDetails) {
 		try {
 			Object info = authService.getInfo(userDetails);
-			System.out.println("info = " + info);
 			return ResponseEntity.ok(info);
 		} catch (NotFoundException | UsernameNotFoundException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
@@ -72,14 +73,14 @@ public class AuthController {
 	}
 
 	@GetMapping("/getAllMentorInfo")
-	public ResponseEntity<?> getAllMentorInfo(@AuthenticationPrincipal UserDetails userDetails) {
-		List<Mentor> allMentorInfo = authService.getAllMentorInfo(userDetails);
+	public ResponseEntity<?> getAllMentorInfo() {
+		List<MentorDTO> allMentorInfo = authService.getAllMentorInfo();
 		return ResponseEntity.ok(allMentorInfo);
 	}
 
 	@GetMapping("/getAllMenteeInfo")
-	public ResponseEntity<?> getAlMenteeInfo(@AuthenticationPrincipal UserDetails userDetails) {
-		List<Mentee> allMenteeInfo = authService.getAllMenteeInfo(userDetails);
+	public ResponseEntity<?> getAlMenteeInfo() {
+		List<MenteeDTO> allMenteeInfo = authService.getAllMenteeInfo();
 		return ResponseEntity.ok(allMenteeInfo);
 	}
 }
