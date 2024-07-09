@@ -7,14 +7,10 @@ import lombok.Setter;
 @Setter
 public class ChattingRequest {
 	private Long conversationId;
-	private Long senderId;
-	private Long receiverId;
 	private String content;
 
-	public ChattingRequest(Long conversationId, Long senderId, Long receiverId, String content) {
+	public ChattingRequest(Long conversationId, String content) {
 		this.conversationId = conversationId;
-		this.senderId = senderId;
-		this.receiverId = receiverId;
 		this.content = content;
 	}
 }

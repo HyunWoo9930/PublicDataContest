@@ -3,6 +3,7 @@ package org.example.publicdatacontest.controller;
 import java.util.List;
 
 import org.example.publicdatacontest.domain.dto.requestDTO.ChattingRequest;
+import org.example.publicdatacontest.domain.dto.responseDTO.ChatResponse;
 import org.example.publicdatacontest.domain.dto.responseDTO.ConversationResponse;
 import org.example.publicdatacontest.service.ChatService;
 import org.example.publicdatacontest.service.ConversationService;
@@ -38,7 +39,7 @@ public class ChatController {
 		@RequestParam("mentorId") Long mentorId
 	) {
 		try {
-			conversationService.makeChat(userDetails, mentorId);
+			conversationService.makeConversation(userDetails, mentorId);
 			return ResponseEntity.ok("conversation created");
 		} catch (NotFoundException e) {
 			return ResponseEntity.status(404).body(e.getMessage());
@@ -53,8 +54,8 @@ public class ChatController {
 		@RequestBody ChattingRequest chattingRequest
 	) {
 		try {
-			chatService.makeChat(userDetails, chattingRequest);
-			return ResponseEntity.ok("chat created");
+			ChatResponse chatResponse = chatService.makeChat(userDetails, chattingRequest);
+			return ResponseEntity.ok(chatResponse);
 		} catch (RuntimeException e) {
 			return ResponseEntity.status(400).body(e.getMessage());
 		}
