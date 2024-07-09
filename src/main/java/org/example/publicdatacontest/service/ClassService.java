@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.example.publicdatacontest.domain.category.SubCategory;
 import org.example.publicdatacontest.domain.mentor.Mentor;
 import org.example.publicdatacontest.domain.mentor.MentorClass;
+import org.example.publicdatacontest.domain.mentor.MentorClassDetailRequest;
 import org.example.publicdatacontest.domain.mentor.MentorClassRequest;
 import org.example.publicdatacontest.domain.mentor.MentorClassResponse;
 import org.example.publicdatacontest.repository.category.SubCategoryRepository;
@@ -83,5 +84,23 @@ public class ClassService {
 			mentorClassResponses.add(mentorClassResponse);
 		});
 		return mentorClassResponses;
+	}
+
+	public MentorClassResponse mentoringDetail(Long classId) {
+		MentorClass mentorClass = mentorClassRepository.findById(classId)
+			.orElseThrow(() -> new RuntimeException("해당 클래스가 존재하지 않습니다."));
+
+		return new MentorClassResponse(
+			mentorClass.getClassId(),
+			mentorClass.getMentor().getMentorName(),
+			mentorClass.getSubCategory().getName(),
+			mentorClass.getSubCategory().getCategory().getName(),
+			mentorClass.getName(),
+			mentorClass.getLocation(),
+			mentorClass.getTime(),
+			mentorClass.getPrice(),
+			mentorClass.getDescription(),
+			mentorClass.getActive(),
+			mentorClass.getCreatedAt());
 	}
 }

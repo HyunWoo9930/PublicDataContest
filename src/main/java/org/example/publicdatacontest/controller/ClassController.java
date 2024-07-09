@@ -2,7 +2,6 @@ package org.example.publicdatacontest.controller;
 
 import java.util.List;
 
-import org.example.publicdatacontest.domain.mentor.MentorClass;
 import org.example.publicdatacontest.domain.mentor.MentorClassRequest;
 import org.example.publicdatacontest.domain.mentor.MentorClassResponse;
 import org.example.publicdatacontest.service.ClassService;
@@ -16,8 +15,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 
 @RestController
@@ -42,9 +43,24 @@ public class ClassController {
 	}
 
 	@GetMapping("/mentoring_list")
+	@Operation(summary = "전체 멘토링 리스트 조회")
 	public ResponseEntity<?> mentoringList(
 	) {
 		List<MentorClassResponse> mentorClasses = classService.mentoringList();
 		return ResponseEntity.ok(mentorClasses);
+	}
+
+	@GetMapping("/mentoring_detail")
+	@Operation(summary = "멘토링 상세 조회")
+	public ResponseEntity<?> mentoringDetail(
+		@RequestParam(value = "classId") Long classId
+	) {
+		try {
+			MentorClassResponse mentorClassResponse = classService.mentoringDetail(classId);
+			return ResponseEntity.ok(mentorClassResponse);
+		} catch (RuntimeException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		}
+
 	}
 }
