@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.webjars.NotFoundException;
 
+import io.swagger.v3.oas.annotations.Operation;
+
 @RestController
 @RequestMapping("/api/chat")
 @CrossOrigin(origins = "*")
@@ -67,6 +69,22 @@ public class ChatController {
 	) {
 		try {
 			List<ConversationResponse> chatList = chatService.getChatList(userDetails);
+			return ResponseEntity.ok(chatList);
+		} catch (NotFoundException e) {
+			return ResponseEntity.status(404).body(e.getMessage());
+		} catch (RuntimeException e) {
+			return ResponseEntity.status(400).body(e.getMessage());
+		}
+	}
+
+	@GetMapping("/chatting_detail")
+	@Operation(summary = "채팅방 들어갔을때 채팅 내용 가져오기")
+	public ResponseEntity<?> chattingDetail(
+		@AuthenticationPrincipal UserDetails userDetails,
+		@RequestParam("conversationId") Long conversationId
+	) {
+		try {
+			List<ChatResponse> chatList = chatService.getChatDetail(userDetails, conversationId);
 			return ResponseEntity.ok(chatList);
 		} catch (NotFoundException e) {
 			return ResponseEntity.status(404).body(e.getMessage());

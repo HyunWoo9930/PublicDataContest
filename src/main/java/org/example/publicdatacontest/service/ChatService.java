@@ -118,4 +118,40 @@ public class ChatService {
 		});
 		return conversationResponses;
 	}
+
+	public List<ChatResponse> getChatDetail(UserDetails userDetails, Long conversationId) {
+		if(!userDetails.isAccountNonExpired()) {
+			throw new RuntimeException("계정이 만료되었습니다.");
+		}
+		Conversation conversation = conversationRepository.findById(conversationId)
+			.orElseThrow(() -> new NotFoundException("conversation이 없습니다."));
+
+		if(mentorRepository.findByUserId(userDetails.getUsername()).isPresent()) {
+			if(!conversation.getMentor().getMentorId().equals(mentorRepository.findByUserId(userDetails.getUsername()).get().getMentorId())) {
+				throw new RuntimeException("권한이 없습니다.");
+			}
+		} else if(menteeRepository.findByUserId(userDetails.getUsername()).isPresent()) {
+			if(!conversation.getMentee().getMenteeId().equals(menteeRepository.findByUserId(userDetails.getUsername()).get().getMenteeId())) {
+				throw new RuntimeException("권한이 없습니다.");
+			}
+		}
+
+		List<Chat> chats = chatRepository.findAllByConversationConversationId(conversationId);
+		List<ChatResponse> chatResponses = new ArrayList<>();
+		chats.forEach(chat -> {
+			ChatResponse chatResponse = new ChatResponse(
+				chat.getMessageId(),
+				chat.getConversation().getConversationId(),
+				chat.getSenderId(),
+				chat.getSenderType(),
+				chat.getReceiverId(),
+				chat.getReceiverType(),
+				chat.getContent(),
+				chat.getTimestamp()
+			);
+			chatResponses.add(chatResponse);
+		});
+		return chatResponses;
+
+	}
 }
