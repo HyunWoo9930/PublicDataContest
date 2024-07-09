@@ -73,4 +73,13 @@ public class Mentor {
 
 	@OneToMany(mappedBy = "mentor")
 	private Set<MentorCategory> mentorCategories;
+
+
+	// 연관관계 메서드
+	// 1. MentorCategory를 받아와서 set에 저장
+	// 2. Mentor 객체를 MentorCategory의 Mentor로 저장
+	public void addMentorCategory(MentorCategory mentorCategory) {
+		this.mentorCategories.add(mentorCategory);
+		mentorCategory.setMentor(this);
+	}
 }
