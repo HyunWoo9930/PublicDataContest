@@ -48,7 +48,7 @@ public class MentorCategoryService {
         }
 
         for (SubCategory sc : existingSubCategorySet) {
-            mentorCategoryRepository.save(MentorCategory.of(mentor.getMentorId(), sc.getSubCategoryId(), mentor, sc, sc.getName(), sc.getCategory().getName()));
+            mentorCategoryRepository.save(MentorCategory.of(mentor.getMentorId(), sc.getSubCategoryId(), mentor, sc));
         }
 
         return "MentorCategory saved successfully";

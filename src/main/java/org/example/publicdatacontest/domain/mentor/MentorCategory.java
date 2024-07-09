@@ -22,9 +22,6 @@ public class MentorCategory {
 	@Column(name = "subcategory_id")
 	private Long subCategoryId;
 
-	private String name;
-	private String superName;
-
 	@ManyToOne
 	@JoinColumn(name = "mentor_id", insertable = false, updatable = false)
 	private Mentor mentor;
@@ -33,19 +30,17 @@ public class MentorCategory {
 	@JoinColumn(name = "subcategory_id", insertable = false, updatable = false)
 	private SubCategory subCategory;
 
-	private MentorCategory(Long mentorId, Long subCategoryId, Mentor mentor, SubCategory subCategory, String subName, String superName) {
+	private MentorCategory(Long mentorId, Long subCategoryId, Mentor mentor, SubCategory subCategory) {
 		if(mentor == null) throw new InvalidParameterException();
 		if(subCategory == null) throw new InvalidParameterException();
 
 		this.mentorId = mentorId;
 		this.subCategoryId = subCategoryId;
-		this.name = subName;
-		this.superName = superName;
 		mentor.addMentorCategory(this);
 		subCategory.addMentorCategory(this);
 	}
 
-	public static MentorCategory of(Long mId, Long sId, Mentor mentor, SubCategory subCategory, String subName, String superName) {
-		return new MentorCategory(mId, sId, mentor, subCategory, subName, superName);
+	public static MentorCategory of(Long mId, Long sId, Mentor mentor, SubCategory subCategory) {
+		return new MentorCategory(mId, sId, mentor, subCategory);
 	}
 }

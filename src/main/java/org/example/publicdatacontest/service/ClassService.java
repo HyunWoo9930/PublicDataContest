@@ -1,10 +1,15 @@
 package org.example.publicdatacontest.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
+import org.example.publicdatacontest.domain.category.SubCategory;
 import org.example.publicdatacontest.domain.mentor.Mentor;
 import org.example.publicdatacontest.domain.mentor.MentorClass;
+import org.example.publicdatacontest.domain.mentor.MentorClassRequest;
 import org.example.publicdatacontest.domain.mentor.MentorClassResponse;
+import org.example.publicdatacontest.repository.category.SubCategoryRepository;
 import org.example.publicdatacontest.repository.mentor.MentorClassRepository;
 import org.example.publicdatacontest.repository.mentor.MentorRepository;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,13 +24,17 @@ public class ClassService {
 
 	private final MentorClassRepository mentorClassRepository;
 
-	public ClassService(MentorRepository mentorRepository, MentorClassRepository mentorClassRepository) {
+	private final SubCategoryRepository subCategoryRepository;
+
+	public ClassService(MentorRepository mentorRepository, MentorClassRepository mentorClassRepository,
+		SubCategoryRepository subCategoryRepository) {
 		this.mentorRepository = mentorRepository;
 		this.mentorClassRepository = mentorClassRepository;
+		this.subCategoryRepository = subCategoryRepository;
 	}
 
 	@Transactional
-	public void makeMentoring(UserDetails userDetails, MentorClassResponse mentorClassResponse) {
+	public void makeMentoring(UserDetails userDetails, MentorClassRequest mentorClassRequest) {
 		MentorClass mentorClass = new MentorClass();
 
 		Optional<Mentor> mentor = mentorRepository.findByUserId(userDetails.getUsername());
@@ -35,12 +44,44 @@ public class ClassService {
 
 		mentorClass.setMentor(mentor.get());
 		mentorClass.setActive(true);
-		mentorClass.setName(mentorClassResponse.getName());
-		mentorClass.setDescription(mentorClassResponse.getDescription());
-		mentorClass.setLocation(mentorClassResponse.getLocation());
-		mentorClass.setTime(mentorClassResponse.getTime());
-		mentorClass.setPrice(mentorClassResponse.getPrice());
+		mentorClass.setName(mentorClassRequest.getName());
+		mentorClass.setDescription(mentorClassRequest.getDescription());
+		mentorClass.setLocation(mentorClassRequest.getLocation());
+		mentorClass.setTime(mentorClassRequest.getTime());
+		mentorClass.setPrice(mentorClassRequest.getPrice());
+
+		System.out.println("mentor = " + mentor.get().getMentorCategories());
+
+		SubCategory subCategory = mentor.get().getMentorCategories().stream()
+			.filter(mentorCategory -> mentorCategory.getSubCategory()
+				.getSubCategoryId()
+				.equals(mentorClassRequest.getSubcategoryId()))
+			.findFirst()
+			.orElseThrow(() -> new RuntimeException("멘토가 선택한 소분류에 대한 권한이 없습니다.")).getSubCategory();
+
+		mentorClass.setSubCategory(subCategory);
 
 		mentorClassRepository.save(mentorClass);
+	}
+
+	public List<MentorClassResponse> mentoringList() {
+		List<MentorClass> classes = mentorClassRepository.findAll();
+		List<MentorClassResponse> mentorClassResponses = new ArrayList<>();
+		classes.forEach(mentorClass -> {
+			MentorClassResponse mentorClassResponse = new MentorClassResponse(
+				mentorClass.getClassId(),
+				mentorClass.getMentor().getMentorName(),
+				mentorClass.getSubCategory().getName(),
+				mentorClass.getSubCategory().getCategory().getName(),
+				mentorClass.getName(),
+				mentorClass.getLocation(),
+				mentorClass.getTime(),
+				mentorClass.getPrice(),
+				mentorClass.getDescription(),
+				mentorClass.getActive(),
+				mentorClass.getCreatedAt());
+			mentorClassResponses.add(mentorClassResponse);
+		});
+		return mentorClassResponses;
 	}
 }
