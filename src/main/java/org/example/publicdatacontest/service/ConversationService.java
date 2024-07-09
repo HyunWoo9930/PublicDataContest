@@ -30,6 +30,9 @@ public class ConversationService {
 	public void makeChat(UserDetails userDetails, Long mentorId) {
 		Mentor mentor = mentorRepository.findById(mentorId).orElseThrow(() -> new NotFoundException("mentor가 없습니다."));
 		Mentee mentee = menteeRepository.findByUserId(userDetails.getUsername()).orElseThrow(() -> new NotFoundException("mentee가 없거나, mentee가 아닙니다."));
+		if(conversationRepository.findByMenteeMenteeIdAndMentorMentorId(mentee.getMenteeId(), mentorId).isPresent()) {
+			throw new RuntimeException("이미 채팅이 생성되었습니다.");
+		}
 		Conversation conversation = new Conversation(mentor, mentee, LocalDateTime.now());
 		Conversation save = conversationRepository.save(conversation);
 		conversationRepository.findById(save.getConversationId())

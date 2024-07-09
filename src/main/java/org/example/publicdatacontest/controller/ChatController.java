@@ -1,12 +1,16 @@
 package org.example.publicdatacontest.controller;
 
+import java.util.List;
+
 import org.example.publicdatacontest.domain.dto.requestDTO.ChattingRequest;
+import org.example.publicdatacontest.domain.dto.responseDTO.ConversationResponse;
 import org.example.publicdatacontest.service.ChatService;
 import org.example.publicdatacontest.service.ConversationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +42,8 @@ public class ChatController {
 			return ResponseEntity.ok("conversation created");
 		} catch (NotFoundException e) {
 			return ResponseEntity.status(404).body(e.getMessage());
+		} catch (RuntimeException e) {
+			return ResponseEntity.status(400).body(e.getMessage());
 		}
 	}
 
@@ -49,6 +55,20 @@ public class ChatController {
 		try {
 			chatService.makeChat(userDetails, chattingRequest);
 			return ResponseEntity.ok("chat created");
+		} catch (RuntimeException e) {
+			return ResponseEntity.status(400).body(e.getMessage());
+		}
+	}
+
+	@GetMapping("/chat_list")
+	public ResponseEntity<?> chatList(
+		@AuthenticationPrincipal UserDetails userDetails
+	) {
+		try {
+			List<ConversationResponse> chatList = chatService.getChatList(userDetails);
+			return ResponseEntity.ok(chatList);
+		} catch (NotFoundException e) {
+			return ResponseEntity.status(404).body(e.getMessage());
 		} catch (RuntimeException e) {
 			return ResponseEntity.status(400).body(e.getMessage());
 		}
