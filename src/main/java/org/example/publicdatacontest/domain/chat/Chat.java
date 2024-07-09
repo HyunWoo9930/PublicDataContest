@@ -24,4 +24,15 @@ public class Chat {
 	private String receiverType;
 	private String content;
 	private LocalDateTime timestamp;
+
+	public Chat(Conversation conversation, Long senderId, String senderType, Long receiverId, String receiverType,
+		String content, LocalDateTime timestamp) {
+		this.conversation = conversation;
+		this.senderId = senderId;
+		this.senderType = senderType;
+		this.receiverId = receiverId;
+		this.receiverType = receiverType;
+		this.content = content;
+		this.timestamp = timestamp;
+	}
 }
