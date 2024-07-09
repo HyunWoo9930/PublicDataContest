@@ -41,8 +41,8 @@ public class ChatController {
 		@RequestParam("mentorId") Long mentorId
 	) {
 		try {
-			conversationService.makeConversation(userDetails, mentorId);
-			return ResponseEntity.ok("conversation created");
+			Long conversation = conversationService.makeConversation(userDetails, mentorId);
+			return ResponseEntity.ok(conversation);
 		} catch (NotFoundException e) {
 			return ResponseEntity.status(404).body(e.getMessage());
 		} catch (RuntimeException e) {
@@ -64,6 +64,7 @@ public class ChatController {
 	}
 
 	@GetMapping("/chat_list")
+	@CrossOrigin(origins = "*")
 	public ResponseEntity<?> chatList(
 		@AuthenticationPrincipal UserDetails userDetails
 	) {
