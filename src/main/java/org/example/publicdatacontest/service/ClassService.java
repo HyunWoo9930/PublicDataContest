@@ -71,6 +71,7 @@ public class ClassService {
 			MentorClassResponse mentorClassResponse = new MentorClassResponse(
 				mentorClass.getClassId(),
 				mentorClass.getMentor().getMentorName(),
+				mentorClass.getMentor().getMentorId(),
 				mentorClass.getSubCategory().getName(),
 				mentorClass.getSubCategory().getCategory().getName(),
 				mentorClass.getName(),
@@ -92,6 +93,7 @@ public class ClassService {
 		return new MentorClassResponse(
 			mentorClass.getClassId(),
 			mentorClass.getMentor().getMentorName(),
+			mentorClass.getMentor().getMentorId(),
 			mentorClass.getSubCategory().getName(),
 			mentorClass.getSubCategory().getCategory().getName(),
 			mentorClass.getName(),

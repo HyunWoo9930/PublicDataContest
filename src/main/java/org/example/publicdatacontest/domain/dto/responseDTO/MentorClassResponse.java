@@ -10,6 +10,7 @@ import lombok.Setter;
 public class MentorClassResponse {
 	private Long classId;
 	private String mentorName;
+	private Long mentorId;
 	private String subcategoryName;
 	private String categoryName;
 	private String name;
@@ -20,10 +21,11 @@ public class MentorClassResponse {
 	private Boolean active;
 	private LocalDateTime createdAt;
 
-	public MentorClassResponse(Long classId, String mentorName, String subcategoryName, String categoryName, String name,
+	public MentorClassResponse(Long classId, String mentorName, Long mentorId, String subcategoryName, String categoryName, String name,
 		String location, Long time, Long price, String description, Boolean active, LocalDateTime createdAt) {
 		this.classId = classId;
 		this.mentorName = mentorName;
+		this.mentorId = mentorId;
 		this.subcategoryName = subcategoryName;
 		this.categoryName = categoryName;
 		this.name = name;
