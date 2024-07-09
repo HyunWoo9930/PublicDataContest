@@ -2,6 +2,7 @@ package org.example.publicdatacontest.domain.mentor;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import org.example.publicdatacontest.domain.category.SubCategory;
@@ -11,6 +12,7 @@ import java.security.InvalidParameterException;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 @IdClass(MentorCategoryId.class)
 public class MentorCategory {
 	@Id
