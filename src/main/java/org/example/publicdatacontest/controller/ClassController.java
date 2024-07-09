@@ -2,8 +2,8 @@ package org.example.publicdatacontest.controller;
 
 import java.util.List;
 
-import org.example.publicdatacontest.domain.mentor.MentorClassRequest;
-import org.example.publicdatacontest.domain.mentor.MentorClassResponse;
+import org.example.publicdatacontest.domain.dto.requestDTO.MentorClassRequest;
+import org.example.publicdatacontest.domain.dto.responseDTO.MentorClassResponse;
 import org.example.publicdatacontest.service.ClassService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

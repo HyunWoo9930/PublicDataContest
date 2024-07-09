@@ -2,10 +2,8 @@ package org.example.publicdatacontest.controller;
 
 import java.util.List;
 
-import org.example.publicdatacontest.domain.mentee.Mentee;
-import org.example.publicdatacontest.domain.mentee.MenteeDTO;
-import org.example.publicdatacontest.domain.mentor.Mentor;
-import org.example.publicdatacontest.domain.mentor.MentorDTO;
+import org.example.publicdatacontest.domain.dto.responseDTO.MenteeResponse;
+import org.example.publicdatacontest.domain.dto.responseDTO.MentorResponse;
 import org.example.publicdatacontest.domain.signinup.LoginRequest;
 import org.example.publicdatacontest.domain.signinup.SignUpRequest;
 import org.example.publicdatacontest.service.AuthService;
@@ -74,13 +72,13 @@ public class AuthController {
 
 	@GetMapping("/getAllMentorInfo")
 	public ResponseEntity<?> getAllMentorInfo() {
-		List<MentorDTO> allMentorInfo = authService.getAllMentorInfo();
+		List<MentorResponse> allMentorInfo = authService.getAllMentorInfo();
 		return ResponseEntity.ok(allMentorInfo);
 	}
 
 	@GetMapping("/getAllMenteeInfo")
 	public ResponseEntity<?> getAlMenteeInfo() {
-		List<MenteeDTO> allMenteeInfo = authService.getAllMenteeInfo();
+		List<MenteeResponse> allMenteeInfo = authService.getAllMenteeInfo();
 		return ResponseEntity.ok(allMenteeInfo);
 	}
 }

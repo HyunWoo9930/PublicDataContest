@@ -1,23 +1,22 @@
 package org.example.publicdatacontest.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.example.publicdatacontest.domain.chat.Conversation;
+import org.example.publicdatacontest.domain.dto.responseDTO.MenteeInfoResponse;
+import org.example.publicdatacontest.domain.dto.responseDTO.MenteeResponse;
+import org.example.publicdatacontest.domain.dto.responseDTO.MentorInfoResponse;
+import org.example.publicdatacontest.domain.dto.responseDTO.MentorResponse;
 import org.example.publicdatacontest.domain.mentee.Mentee;
 import org.example.publicdatacontest.domain.mentee.MenteeCategory;
 import org.example.publicdatacontest.domain.mentee.MenteeClass;
-import org.example.publicdatacontest.domain.mentee.MenteeDTO;
-import org.example.publicdatacontest.domain.mentee.MenteeInfoResponse;
 import org.example.publicdatacontest.domain.mentor.Mentor;
 import org.example.publicdatacontest.domain.mentor.MentorBadge;
 import org.example.publicdatacontest.domain.mentor.MentorCategory;
 import org.example.publicdatacontest.domain.mentor.MentorCertificate;
 import org.example.publicdatacontest.domain.mentor.MentorClass;
-import org.example.publicdatacontest.domain.mentor.MentorDTO;
-import org.example.publicdatacontest.domain.mentor.MentorInfoResponse;
 import org.example.publicdatacontest.domain.signinup.LoginRequest;
 import org.example.publicdatacontest.domain.signinup.SignUpRequest;
 import org.example.publicdatacontest.domain.util.Reports;
@@ -153,81 +152,72 @@ public class AuthService {
 		}
 	}
 
-	public List<MentorDTO> getAllMentorInfo() {
+	public List<MentorResponse> getAllMentorInfo() {
 		return mentorRepository.findAll().stream()
 			.map(this::convertToDTO)
 			.collect(Collectors.toList());
 	}
 
-	public List<MenteeDTO> getAllMenteeInfo() {
+	public List<MenteeResponse> getAllMenteeInfo() {
 		return menteeRepository.findAll().stream()
 			.map(this::convertToDTO)
 			.collect(Collectors.toList());
 	}
 
-	public MentorDTO getMentorById(Long id) {
+	public MentorResponse getMentorById(Long id) {
 		Mentor mentor = mentorRepository.findById(id).orElseThrow(() -> new NotFoundException("Mentor not found"));
 		return convertToDTO(mentor);
 	}
 
-	private MentorDTO convertToDTO(Mentor mentor) {
-		MentorDTO dto = new MentorDTO();
-		dto.setMentorId(mentor.getMentorId());
-		dto.setUserId(mentor.getUserId());
-		dto.setMentorName(mentor.getMentorName());
-		dto.setGender(mentor.getGender());
-		dto.setBirth(mentor.getBirth());
-		dto.setEmail(mentor.getEmail());
-		dto.setPhoneNumber(mentor.getPhoneNumber());
-		dto.setAddress(mentor.getAddress());
-		dto.setMentoringCount(mentor.getMentoringCount());
-		dto.setStudentCount(mentor.getStudentCount());
-		dto.setReemploymentIdea(mentor.getReemploymentIdea());
-		dto.setActive(mentor.getActive());
-		dto.setIsEmailAlarmAgreed(mentor.getIsEmailAlarmAgreed());
-		dto.setCreatedAt(mentor.getCreatedAt());
-
-		dto.setCertificateIds(mentor.getCertificates().stream().map(MentorCertificate::getCertificateId).collect(
-			Collectors.toSet()));
-		dto.setBadgeIds(mentor.getBadges().stream().map(MentorBadge::getBadgeId).collect(Collectors.toSet()));
-		dto.setMentorClassIds(
-			mentor.getMentorClasses().stream().map(MentorClass::getClassId).collect(Collectors.toSet()));
-		dto.setReportIds(mentor.getReports().stream().map(Reports::getReportId).collect(Collectors.toSet()));
-		dto.setConversationIds(
-			mentor.getConversations().stream().map(Conversation::getConversationId).collect(Collectors.toSet()));
-		dto.setMentorCategoryIds(
-			mentor.getMentorCategories().stream().map(MentorCategory::getSubCategoryId).collect(Collectors.toSet()));
-
-		return dto;
+	private MentorResponse convertToDTO(Mentor mentor) {
+		return new MentorResponse(
+			mentor.getMentorId(),
+			mentor.getUserId(),
+			mentor.getMentorName(),
+			mentor.getGender(),
+			mentor.getBirth(),
+			mentor.getEmail(),
+			mentor.getPhoneNumber(),
+			mentor.getAddress(),
+			mentor.getMentoringCount(),
+			mentor.getStudentCount(),
+			mentor.getReemploymentIdea(),
+			mentor.getActive(),
+			mentor.getIsEmailAlarmAgreed(),
+			mentor.getCreatedAt(),
+			mentor.getCertificates().stream().map(MentorCertificate::getCertificateId).collect(Collectors.toSet()),
+			mentor.getBadges().stream().map(MentorBadge::getBadgeId).collect(Collectors.toSet()),
+			mentor.getMentorClasses().stream().map(MentorClass::getClassId).collect(Collectors.toSet()),
+			mentor.getReports().stream().map(Reports::getReportId).collect(Collectors.toSet()),
+			mentor.getConversations().stream().map(Conversation::getConversationId).collect(Collectors.toSet()),
+			mentor.getMentorCategories().stream().map(MentorCategory::getSubCategoryId).collect(Collectors.toSet())
+		);
 	}
 
-	public MenteeDTO getMenteeById(Long id) {
+	public MenteeResponse getMenteeById(Long id) {
 		Mentee mentee = menteeRepository.findById(id).orElseThrow(() -> new NotFoundException("Mentee not found"));
 		return convertToDTO(mentee);
 	}
 
-	private MenteeDTO convertToDTO(Mentee mentee) {
-		MenteeDTO dto = new MenteeDTO();
-		dto.setMenteeId(mentee.getMenteeId());
-		dto.setUserId(mentee.getUserId());
-		dto.setMenteeName(mentee.getMenteeName());
-		dto.setGender(mentee.getGender());
-		dto.setBirth(mentee.getBirth());
-		dto.setEmail(mentee.getEmail());
-		dto.setPhoneNumber(mentee.getPhoneNumber());
-		dto.setAddress(mentee.getAddress());
-		dto.setEmploymentIdea(mentee.getEmploymentIdea());
-		dto.setActive(mentee.getActive());
-		dto.setIsEmailAlarmAgreed(mentee.getIsEmailAlarmAgreed());
-		dto.setCreatedAt(mentee.getCreatedAt());
-
-		dto.setReportIds(mentee.getReports().stream().map(Reports::getReportId).collect(Collectors.toSet()));
-		dto.setConversationIds(mentee.getConversations().stream().map(Conversation::getConversationId).collect(Collectors.toSet()));
-		dto.setMenteeClassIds(mentee.getMenteeClasses().stream().map(MenteeClass::getClassId).collect(Collectors.toSet()));
-		dto.setMenteeCategoryIds(
-			mentee.getMenteeCategories().stream().map(MenteeCategory::getSubCategoryId).collect(Collectors.toSet()));
-		dto.setReviewIds(mentee.getReviews().stream().map(Review::getReviewId).collect(Collectors.toSet()));
-
-		return dto;
+	private MenteeResponse convertToDTO(Mentee mentee) {
+		return new MenteeResponse(
+			mentee.getMenteeId(),
+			mentee.getUserId(),
+			mentee.getMenteeName(),
+			mentee.getGender(),
+			mentee.getBirth(),
+			mentee.getEmail(),
+			mentee.getPhoneNumber(),
+			mentee.getAddress(),
+			mentee.getEmploymentIdea(),
+			mentee.getActive(),
+			mentee.getIsEmailAlarmAgreed(),
+			mentee.getCreatedAt(),
+			mentee.getReports().stream().map(Reports::getReportId).collect(Collectors.toSet()),
+			mentee.getConversations().stream().map(Conversation::getConversationId).collect(Collectors.toSet()),
+			mentee.getMenteeClasses().stream().map(MenteeClass::getClassId).collect(Collectors.toSet()),
+			mentee.getMenteeCategories().stream().map(MenteeCategory::getSubCategoryId).collect(Collectors.toSet()),
+			mentee.getReviews().stream().map(Review::getReviewId).collect(Collectors.toSet())
+		);
 	}
 }

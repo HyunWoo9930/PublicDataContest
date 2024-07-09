@@ -1,4 +1,4 @@
-package org.example.publicdatacontest.domain.mentor;
+package org.example.publicdatacontest.domain.dto.requestDTO;
 
 import lombok.Getter;
 import lombok.Setter;

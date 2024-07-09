@@ -1,4 +1,4 @@
-package org.example.publicdatacontest.domain.mentor;
+package org.example.publicdatacontest.domain.dto.responseDTO;
 
 import java.time.LocalDateTime;
 
