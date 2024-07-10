@@ -120,18 +120,22 @@ public class ChatService {
 	}
 
 	public List<ChatResponse> getChatDetail(UserDetails userDetails, Long conversationId) {
-		if(!userDetails.isAccountNonExpired()) {
+		if (!userDetails.isAccountNonExpired()) {
 			throw new RuntimeException("계정이 만료되었습니다.");
 		}
 		Conversation conversation = conversationRepository.findById(conversationId)
 			.orElseThrow(() -> new NotFoundException("conversation이 없습니다."));
 
-		if(mentorRepository.findByUserId(userDetails.getUsername()).isPresent()) {
-			if(!conversation.getMentor().getMentorId().equals(mentorRepository.findByUserId(userDetails.getUsername()).get().getMentorId())) {
+		if (mentorRepository.findByUserId(userDetails.getUsername()).isPresent()) {
+			if (!conversation.getMentor()
+				.getMentorId()
+				.equals(mentorRepository.findByUserId(userDetails.getUsername()).get().getMentorId())) {
 				throw new RuntimeException("권한이 없습니다.");
 			}
-		} else if(menteeRepository.findByUserId(userDetails.getUsername()).isPresent()) {
-			if(!conversation.getMentee().getMenteeId().equals(menteeRepository.findByUserId(userDetails.getUsername()).get().getMenteeId())) {
+		} else if (menteeRepository.findByUserId(userDetails.getUsername()).isPresent()) {
+			if (!conversation.getMentee()
+				.getMenteeId()
+				.equals(menteeRepository.findByUserId(userDetails.getUsername()).get().getMenteeId())) {
 				throw new RuntimeException("권한이 없습니다.");
 			}
 		}

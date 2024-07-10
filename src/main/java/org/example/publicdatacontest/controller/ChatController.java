@@ -64,7 +64,6 @@ public class ChatController {
 	}
 
 	@GetMapping("/chat_list")
-	@CrossOrigin(origins = "*")
 	public ResponseEntity<?> chatList(
 		@AuthenticationPrincipal UserDetails userDetails
 	) {
