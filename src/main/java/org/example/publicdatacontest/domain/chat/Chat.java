@@ -39,4 +39,8 @@ public class Chat {
 		this.content = content;
 		this.timestamp = timestamp;
 	}
+
+	public Chat() {
+
+	}
 }
