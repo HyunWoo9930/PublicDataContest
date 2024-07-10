@@ -20,23 +20,23 @@ public class Chat {
 
 	private Long senderId;
 	private String senderType;
+	private String senderName;
 	private Long receiverId;
 	private String receiverType;
+	private String receiverName;
 	private String content;
 	private LocalDateTime timestamp;
 
-	public Chat(Conversation conversation, Long senderId, String senderType, Long receiverId, String receiverType,
-		String content, LocalDateTime timestamp) {
+	public Chat(Conversation conversation, Long senderId, String senderType, String senderName,
+		Long receiverId, String receiverType, String receiverName, String content, LocalDateTime timestamp) {
 		this.conversation = conversation;
 		this.senderId = senderId;
 		this.senderType = senderType;
+		this.senderName = senderName;
 		this.receiverId = receiverId;
 		this.receiverType = receiverType;
+		this.receiverName = receiverName;
 		this.content = content;
 		this.timestamp = timestamp;
-	}
-
-	public Chat() {
-
 	}
 }

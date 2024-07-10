@@ -3,6 +3,7 @@ package org.example.publicdatacontest.service;
 import java.time.LocalDateTime;
 
 import org.example.publicdatacontest.domain.chat.Conversation;
+import org.example.publicdatacontest.domain.dto.responseDTO.MakeChatResponse;
 import org.example.publicdatacontest.domain.mentee.Mentee;
 import org.example.publicdatacontest.domain.mentor.Mentor;
 import org.example.publicdatacontest.repository.chat.ConversationRepository;
@@ -27,20 +28,26 @@ public class ConversationService {
 		this.menteeRepository = menteeRepository;
 	}
 
-	public Long makeConversation(UserDetails userDetails, Long mentorId) {
+	public MakeChatResponse makeConversation(UserDetails userDetails, Long mentorId) {
 		Mentor mentor = mentorRepository.findById(mentorId).orElseThrow(() -> new NotFoundException("mentor가 없습니다."));
 		Mentee mentee = menteeRepository.findByUserId(userDetails.getUsername())
 			.orElseThrow(() -> new NotFoundException("mentee가 없거나, mentee가 아닙니다."));
 		if (conversationRepository.findByMenteeMenteeIdAndMentorMentorId(mentee.getMenteeId(), mentorId).isPresent()) {
 			Conversation conversation = conversationRepository.findByMenteeMenteeIdAndMentorMentorId(
 				mentee.getMenteeId(), mentorId).get();
-			return conversation.getConversationId();
+			return new MakeChatResponse(
+				conversation.getConversationId(),
+				true
+			);
 		}
 		Conversation conversation = new Conversation(mentor, mentee, LocalDateTime.now());
 		Conversation save = conversationRepository.save(conversation);
 		Conversation conversation1 = conversationRepository.findById(save.getConversationId())
 			.orElseThrow(() -> new NotFoundException("conversation이 없습니다."));
-		return conversation1.getConversationId();
+		return new MakeChatResponse(
+			conversation.getConversationId(),
+			false
+		);
 	}
 
 }

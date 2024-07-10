@@ -5,6 +5,7 @@ import java.util.List;
 import org.example.publicdatacontest.domain.dto.requestDTO.ChattingRequest;
 import org.example.publicdatacontest.domain.dto.responseDTO.ChatResponse;
 import org.example.publicdatacontest.domain.dto.responseDTO.ConversationResponse;
+import org.example.publicdatacontest.domain.dto.responseDTO.MakeChatResponse;
 import org.example.publicdatacontest.service.ChatService;
 import org.example.publicdatacontest.service.ConversationService;
 import org.springframework.http.ResponseEntity;
@@ -41,8 +42,8 @@ public class ChatController {
 		@RequestParam("mentorId") Long mentorId
 	) {
 		try {
-			Long conversation = conversationService.makeConversation(userDetails, mentorId);
-			return ResponseEntity.ok(conversation);
+			MakeChatResponse makeChatResponse = conversationService.makeConversation(userDetails, mentorId);
+			return ResponseEntity.ok(makeChatResponse);
 		} catch (NotFoundException e) {
 			return ResponseEntity.status(404).body(e.getMessage());
 		} catch (RuntimeException e) {

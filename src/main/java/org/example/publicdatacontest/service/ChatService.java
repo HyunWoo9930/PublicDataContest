@@ -1,8 +1,8 @@
 package org.example.publicdatacontest.service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.example.publicdatacontest.domain.chat.Chat;
 import org.example.publicdatacontest.domain.chat.Conversation;
@@ -45,17 +45,23 @@ public class ChatService {
 		String senderType;
 		String receiverType;
 		Long receiverId;
+		String senderName;
+		String receiverName;
 
 		if (mentorRepository.findByUserId(userDetails.getUsername()).isPresent()) {
 			senderType = "mentor";
 			senderId = conversation.getMentor().getMentorId();
+			senderName = conversation.getMentor().getMentorName();
 			receiverId = conversation.getMentee().getMenteeId();
 			receiverType = "mentee";
+			receiverName = conversation.getMentee().getMenteeName();
 		} else if (menteeRepository.findByUserId(userDetails.getUsername()).isPresent()) {
 			senderType = "mentee";
 			senderId = conversation.getMentee().getMenteeId();
+			senderName = conversation.getMentee().getMenteeName();
 			receiverId = conversation.getMentor().getMentorId();
 			receiverType = "mentor";
+			receiverName = conversation.getMentor().getMentorName();
 		} else {
 			throw new NotFoundException("User Not Found");
 		}
@@ -68,8 +74,10 @@ public class ChatService {
 			conversation,
 			senderId,
 			senderType,
+			senderName,
 			receiverId,
 			receiverType,
+			receiverName,
 			chattingRequest.getContent(),
 			LocalDateTime.now()
 		);
@@ -81,8 +89,10 @@ public class ChatService {
 			chat.getConversation().getConversationId(),
 			chat.getSenderId(),
 			chat.getSenderType(),
+			chat.getSenderName(),
 			chat.getReceiverId(),
 			chat.getReceiverType(),
+			chat.getReceiverName(),
 			chat.getContent(),
 			chat.getTimestamp()
 		);
@@ -106,17 +116,14 @@ public class ChatService {
 	}
 
 	private List<ConversationResponse> getConversationResponses(List<Conversation> conversations) {
-		List<ConversationResponse> conversationResponses = new ArrayList<>();
-		conversations.forEach(conversation -> {
-			ConversationResponse conversationResponse = new ConversationResponse(
+		return conversations.stream()
+			.map(conversation -> new ConversationResponse(
 				conversation.getConversationId(),
 				conversation.getMentor().getMentorName(),
 				conversation.getMentee().getMenteeName(),
 				conversation.getStartDate()
-			);
-			conversationResponses.add(conversationResponse);
-		});
-		return conversationResponses;
+			))
+			.collect(Collectors.toList());
 	}
 
 	public List<ChatResponse> getChatDetail(UserDetails userDetails, Long conversationId) {
@@ -140,22 +147,19 @@ public class ChatService {
 			}
 		}
 
-		List<Chat> chats = chatRepository.findAllByConversationConversationId(conversationId);
-		List<ChatResponse> chatResponses = new ArrayList<>();
-		chats.forEach(chat -> {
-			ChatResponse chatResponse = new ChatResponse(
+		return chatRepository.findAllByConversationConversationId(conversationId).stream()
+			.map(chat -> new ChatResponse(
 				chat.getMessageId(),
 				chat.getConversation().getConversationId(),
 				chat.getSenderId(),
+				chat.getSenderName(),
 				chat.getSenderType(),
 				chat.getReceiverId(),
+				chat.getReceiverName(),
 				chat.getReceiverType(),
 				chat.getContent(),
 				chat.getTimestamp()
-			);
-			chatResponses.add(chatResponse);
-		});
-		return chatResponses;
-
+			))
+			.collect(Collectors.toList());
 	}
 }
