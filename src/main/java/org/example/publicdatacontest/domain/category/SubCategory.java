@@ -32,11 +32,18 @@ public class SubCategory {
 	@OneToMany(mappedBy = "subCategory")
 	private Set<MenteeCategory> menteeCategories;
 
+
+
 	// 연관관계 메서드
 	// 1. MentorCategory를 받아와서 set에 저장
 	// 2. SubCategory 객체를 MentorCategory의 SubCategory에 저장
 	public void addMentorCategory(MentorCategory mentorCategory) {
 		this.mentorCategories.add(mentorCategory);
 		mentorCategory.setSubCategory(this);
+	}
+
+	public void addMenteeCategory(MenteeCategory menteeCategory) {
+		this.menteeCategories.add(menteeCategory);
+		menteeCategory.setSubCategory(this);
 	}
 }

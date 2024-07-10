@@ -2,7 +2,9 @@ package org.example.publicdatacontest.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.example.publicdatacontest.domain.category.Category;
 import org.example.publicdatacontest.domain.category.SubCategory;
+import org.example.publicdatacontest.domain.dto.responseDTO.CategoryResponse;
 import org.example.publicdatacontest.repository.category.SubCategoryRepository;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +14,7 @@ import java.util.Set;
 @Transactional
 @Service
 @RequiredArgsConstructor
-public class SubCategoryQueryService {
+public class SubCategoryService {
 
     private final SubCategoryRepository subCategoryRepository;
 

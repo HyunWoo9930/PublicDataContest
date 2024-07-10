@@ -68,18 +68,7 @@ public class ClassService {
 		List<MentorClass> classes = mentorClassRepository.findAll();
 		List<MentorClassResponse> mentorClassResponses = new ArrayList<>();
 		classes.forEach(mentorClass -> {
-			MentorClassResponse mentorClassResponse = new MentorClassResponse(
-				mentorClass.getClassId(),
-				mentorClass.getMentor().getMentorName(),
-				mentorClass.getSubCategory().getName(),
-				mentorClass.getSubCategory().getCategory().getName(),
-				mentorClass.getName(),
-				mentorClass.getLocation(),
-				mentorClass.getTime(),
-				mentorClass.getPrice(),
-				mentorClass.getDescription(),
-				mentorClass.getActive(),
-				mentorClass.getCreatedAt());
+			MentorClassResponse mentorClassResponse = new MentorClassResponse(mentorClass);
 			mentorClassResponses.add(mentorClassResponse);
 		});
 		return mentorClassResponses;
@@ -89,17 +78,36 @@ public class ClassService {
 		MentorClass mentorClass = mentorClassRepository.findById(classId)
 			.orElseThrow(() -> new RuntimeException("해당 클래스가 존재하지 않습니다."));
 
-		return new MentorClassResponse(
-			mentorClass.getClassId(),
-			mentorClass.getMentor().getMentorName(),
-			mentorClass.getSubCategory().getName(),
-			mentorClass.getSubCategory().getCategory().getName(),
-			mentorClass.getName(),
-			mentorClass.getLocation(),
-			mentorClass.getTime(),
-			mentorClass.getPrice(),
-			mentorClass.getDescription(),
-			mentorClass.getActive(),
-			mentorClass.getCreatedAt());
+		return new MentorClassResponse(mentorClass);
+	}
+
+	public List<MentorClassResponse> mentoringListByCategory(Long categoryId) {
+		List<MentorClass> classes = mentorClassRepository.findAll().stream()
+				.filter(i -> i.getSubCategory().getCategory().getCategoryId().equals(categoryId))
+				.toList();
+
+		List<MentorClassResponse> mentorClassResponses = new ArrayList<>();
+
+		classes.forEach(mentorClass -> {
+			MentorClassResponse mentorClassResponse = new MentorClassResponse(mentorClass);
+			mentorClassResponses.add(mentorClassResponse);
+		});
+
+		return mentorClassResponses;
+	}
+
+	public List<MentorClassResponse> mentoringListBySubCategory(Long subCategoryId) {
+		List<MentorClass> classes = mentorClassRepository.findAll().stream()
+				.filter(i -> i.getSubCategory().getSubCategoryId().equals(subCategoryId))
+				.toList();
+
+		List<MentorClassResponse> mentorClassResponses = new ArrayList<>();
+
+		classes.forEach(mentorClass -> {
+			MentorClassResponse mentorClassResponse = new MentorClassResponse(mentorClass);
+			mentorClassResponses.add(mentorClassResponse);
+		});
+
+		return mentorClassResponses;
 	}
 }

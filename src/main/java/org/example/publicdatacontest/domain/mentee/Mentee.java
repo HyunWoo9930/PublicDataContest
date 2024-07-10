@@ -7,7 +7,6 @@ import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
-
 import org.example.publicdatacontest.domain.chat.Conversation;
 import org.example.publicdatacontest.domain.util.Reports;
 import org.example.publicdatacontest.domain.util.Review;
@@ -66,5 +65,10 @@ public class Mentee {
 
 	@OneToMany(mappedBy = "mentee")
 	private Set<Review> reviews;
+
+	public void addMenteeCategory(MenteeCategory menteeCategory) {
+		this.menteeCategories.add(menteeCategory);
+		menteeCategory.setMentee(this);
+	}
 }
 

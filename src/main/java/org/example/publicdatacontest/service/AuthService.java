@@ -1,26 +1,14 @@
 package org.example.publicdatacontest.service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import org.example.publicdatacontest.domain.chat.Conversation;
+import jakarta.transaction.Transactional;
 import org.example.publicdatacontest.domain.dto.responseDTO.MenteeInfoResponse;
 import org.example.publicdatacontest.domain.dto.responseDTO.MenteeResponse;
 import org.example.publicdatacontest.domain.dto.responseDTO.MentorInfoResponse;
 import org.example.publicdatacontest.domain.dto.responseDTO.MentorResponse;
 import org.example.publicdatacontest.domain.mentee.Mentee;
-import org.example.publicdatacontest.domain.mentee.MenteeCategory;
-import org.example.publicdatacontest.domain.mentee.MenteeClass;
 import org.example.publicdatacontest.domain.mentor.Mentor;
-import org.example.publicdatacontest.domain.mentor.MentorBadge;
-import org.example.publicdatacontest.domain.mentor.MentorCategory;
-import org.example.publicdatacontest.domain.mentor.MentorCertificate;
-import org.example.publicdatacontest.domain.mentor.MentorClass;
 import org.example.publicdatacontest.domain.signinup.LoginRequest;
 import org.example.publicdatacontest.domain.signinup.SignUpRequest;
-import org.example.publicdatacontest.domain.util.Reports;
-import org.example.publicdatacontest.domain.util.Review;
 import org.example.publicdatacontest.jwt.JwtAuthenticationResponse;
 import org.example.publicdatacontest.jwt.JwtTokenProvider;
 import org.example.publicdatacontest.repository.mentee.MenteeRepository;
@@ -35,7 +23,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
-import jakarta.transaction.Transactional;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AuthService {
@@ -170,28 +160,7 @@ public class AuthService {
 	}
 
 	private MentorResponse convertToDTO(Mentor mentor) {
-		return new MentorResponse(
-			mentor.getMentorId(),
-			mentor.getUserId(),
-			mentor.getMentorName(),
-			mentor.getGender(),
-			mentor.getBirth(),
-			mentor.getEmail(),
-			mentor.getPhoneNumber(),
-			mentor.getAddress(),
-			mentor.getMentoringCount(),
-			mentor.getStudentCount(),
-			mentor.getReemploymentIdea(),
-			mentor.getActive(),
-			mentor.getIsEmailAlarmAgreed(),
-			mentor.getCreatedAt(),
-			mentor.getCertificates().stream().map(MentorCertificate::getCertificateId).collect(Collectors.toSet()),
-			mentor.getBadges().stream().map(MentorBadge::getBadgeId).collect(Collectors.toSet()),
-			mentor.getMentorClasses().stream().map(MentorClass::getClassId).collect(Collectors.toSet()),
-			mentor.getReports().stream().map(Reports::getReportId).collect(Collectors.toSet()),
-			mentor.getConversations().stream().map(Conversation::getConversationId).collect(Collectors.toSet()),
-			mentor.getMentorCategories().stream().map(MentorCategory::getSubCategoryId).collect(Collectors.toSet())
-		);
+		return new MentorResponse(mentor);
 	}
 
 	public MenteeResponse getMenteeById(Long id) {
@@ -200,24 +169,6 @@ public class AuthService {
 	}
 
 	private MenteeResponse convertToDTO(Mentee mentee) {
-		return new MenteeResponse(
-			mentee.getMenteeId(),
-			mentee.getUserId(),
-			mentee.getMenteeName(),
-			mentee.getGender(),
-			mentee.getBirth(),
-			mentee.getEmail(),
-			mentee.getPhoneNumber(),
-			mentee.getAddress(),
-			mentee.getEmploymentIdea(),
-			mentee.getActive(),
-			mentee.getIsEmailAlarmAgreed(),
-			mentee.getCreatedAt(),
-			mentee.getReports().stream().map(Reports::getReportId).collect(Collectors.toSet()),
-			mentee.getConversations().stream().map(Conversation::getConversationId).collect(Collectors.toSet()),
-			mentee.getMenteeClasses().stream().map(MenteeClass::getClassId).collect(Collectors.toSet()),
-			mentee.getMenteeCategories().stream().map(MenteeCategory::getSubCategoryId).collect(Collectors.toSet()),
-			mentee.getReviews().stream().map(Review::getReviewId).collect(Collectors.toSet())
-		);
+		return new MenteeResponse(mentee);
 	}
 }

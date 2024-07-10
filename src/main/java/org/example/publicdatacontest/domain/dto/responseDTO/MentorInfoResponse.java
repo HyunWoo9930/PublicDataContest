@@ -1,7 +1,5 @@
 package org.example.publicdatacontest.domain.dto.responseDTO;
 
-import org.example.publicdatacontest.domain.dto.responseDTO.MentorResponse;
-
 import lombok.Getter;
 import lombok.Setter;
 

@@ -30,4 +30,22 @@ public class Conversation {
 
 	@OneToMany(mappedBy = "conversation")
 	private Set<Chat> chats;
+
+	public Conversation(Long conversationId, Mentor mentor, Mentee mentee, LocalDateTime startDate, Set<Chat> chats) {
+		this.conversationId = conversationId;
+		this.mentor = mentor;
+		this.mentee = mentee;
+		this.startDate = startDate;
+		this.chats = chats;
+	}
+
+	public Conversation(Mentor mentor, Mentee mentee, LocalDateTime startDate) {
+		this.mentor = mentor;
+		this.mentee = mentee;
+		this.startDate = startDate;
+	}
+
+	public Conversation() {
+
+	}
 }

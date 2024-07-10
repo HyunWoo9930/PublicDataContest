@@ -2,10 +2,17 @@ package org.example.publicdatacontest.domain.dto.responseDTO;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.example.publicdatacontest.domain.chat.Conversation;
+import org.example.publicdatacontest.domain.mentee.Mentee;
+import org.example.publicdatacontest.domain.mentee.MenteeCategory;
+import org.example.publicdatacontest.domain.mentee.MenteeClass;
+import org.example.publicdatacontest.domain.util.Reports;
+import org.example.publicdatacontest.domain.util.Review;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -28,26 +35,23 @@ public class MenteeResponse {
 	private Set<Long> menteeCategoryIds;
 	private Set<Long> reviewIds;
 
-	public MenteeResponse(Long menteeId, String userId, String menteeName, String gender, LocalDate birth, String email,
-		String phoneNumber, String address, Boolean employmentIdea, Boolean active, Boolean isEmailAlarmAgreed,
-		LocalDateTime createdAt, Set<Long> reportIds, Set<Long> conversationIds, Set<Long> menteeClassIds,
-		Set<Long> menteeCategoryIds, Set<Long> reviewIds) {
-		this.menteeId = menteeId;
-		this.userId = userId;
-		this.menteeName = menteeName;
-		this.gender = gender;
-		this.birth = birth;
-		this.email = email;
-		this.phoneNumber = phoneNumber;
-		this.address = address;
-		this.employmentIdea = employmentIdea;
-		this.active = active;
-		this.isEmailAlarmAgreed = isEmailAlarmAgreed;
-		this.createdAt = createdAt;
-		this.reportIds = reportIds;
-		this.conversationIds = conversationIds;
-		this.menteeClassIds = menteeClassIds;
-		this.menteeCategoryIds = menteeCategoryIds;
-		this.reviewIds = reviewIds;
+	public MenteeResponse(Mentee mentee) {
+		this.menteeId = mentee.getMenteeId();
+		this.userId = mentee.getUserId();
+		this.menteeName = mentee.getMenteeName();
+		this.gender = mentee.getGender();
+		this.birth = mentee.getBirth();
+		this.email = mentee.getEmail();
+		this.phoneNumber = mentee.getPhoneNumber();
+		this.address = mentee.getAddress();
+		this.employmentIdea = mentee.getEmploymentIdea();
+		this.active = mentee.getActive();
+		this.isEmailAlarmAgreed = mentee.getIsEmailAlarmAgreed();
+		this.createdAt = mentee.getCreatedAt();
+		this.reportIds = mentee.getReports().stream().map(Reports::getReportId).collect(Collectors.toSet());
+		this.conversationIds = mentee.getConversations().stream().map(Conversation::getConversationId).collect(Collectors.toSet());
+		this.menteeClassIds = mentee.getMenteeClasses().stream().map(MenteeClass::getClassId).collect(Collectors.toSet());
+		this.menteeCategoryIds = mentee.getMenteeCategories().stream().map(MenteeCategory::getSubCategoryId).collect(Collectors.toSet());
+		this.reviewIds = mentee.getReviews().stream().map(Review::getReviewId).collect(Collectors.toSet());
 	}
 }

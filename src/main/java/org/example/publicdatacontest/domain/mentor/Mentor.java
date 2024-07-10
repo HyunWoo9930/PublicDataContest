@@ -7,7 +7,6 @@ import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
-
 import org.example.publicdatacontest.domain.chat.Conversation;
 import org.example.publicdatacontest.domain.util.Reports;
 import org.springframework.data.annotation.CreatedDate;
@@ -16,8 +15,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
-
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Getter
