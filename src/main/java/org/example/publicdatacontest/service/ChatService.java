@@ -152,11 +152,11 @@ public class ChatService {
 				chat.getMessageId(),
 				chat.getConversation().getConversationId(),
 				chat.getSenderId(),
-				chat.getSenderName(),
 				chat.getSenderType(),
+				chat.getSenderName(),
 				chat.getReceiverId(),
-				chat.getReceiverName(),
 				chat.getReceiverType(),
+				chat.getReceiverName(),
 				chat.getContent(),
 				chat.getTimestamp()
 			))
