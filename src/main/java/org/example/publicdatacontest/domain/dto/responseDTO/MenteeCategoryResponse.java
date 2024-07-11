@@ -14,11 +14,15 @@ import java.util.Set;
 public class MenteeCategoryResponse {
 
     private String categoryName;
+    private Long categoryId;
     private String subCategoryName;
+    private Long subCategoryId;
 
     public MenteeCategoryResponse(MenteeCategory menteeCategory) {
 
         this.categoryName = menteeCategory.getSubCategory().getCategory().getName();
+        this.categoryId = menteeCategory.getSubCategory().getCategory().getCategoryId();
         this.subCategoryName = menteeCategory.getSubCategory().getName();
+        this.subCategoryId = menteeCategory.getSubCategory().getSubCategoryId();
     }
 }

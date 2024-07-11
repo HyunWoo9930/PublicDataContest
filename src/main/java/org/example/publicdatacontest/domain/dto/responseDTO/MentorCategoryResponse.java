@@ -16,11 +16,15 @@ import java.util.Set;
 public class MentorCategoryResponse {
 
     private String categoryName;
+    private Long categoryId;
     private String subCategoryName;
+    private Long subCategoryId;
 
     public MentorCategoryResponse(MentorCategory mentorCategory) {
 
         this.categoryName = mentorCategory.getSubCategory().getCategory().getName();
+        this.categoryId = mentorCategory.getSubCategory().getCategory().getCategoryId();
         this.subCategoryName = mentorCategory.getSubCategory().getName();
+        this.subCategoryId = mentorCategory.getSubCategory().getSubCategoryId();
     }
 }
