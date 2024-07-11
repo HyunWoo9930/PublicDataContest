@@ -1,12 +1,8 @@
 package org.example.publicdatacontest.domain.mentee;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Past;
-import jakarta.validation.constraints.Pattern;
-import lombok.Getter;
-import lombok.Setter;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Set;
 
 import org.example.publicdatacontest.domain.chat.Conversation;
 import org.example.publicdatacontest.domain.util.Reports;
@@ -14,9 +10,19 @@ import org.example.publicdatacontest.domain.util.Review;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Set;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Pattern;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Getter
@@ -47,6 +53,7 @@ public class Mentee {
 	private Boolean employmentIdea;
 	private Boolean active;
 	private Boolean isEmailAlarmAgreed;
+	private String paymentMethod;
 
 	@CreatedDate
 	@Column(updatable = false)
@@ -67,9 +74,39 @@ public class Mentee {
 	@OneToMany(mappedBy = "mentee")
 	private Set<Review> reviews;
 
+	public Mentee() {
+
+	}
+
 	public void addMenteeCategory(MenteeCategory menteeCategory) {
 		this.menteeCategories.add(menteeCategory);
 		menteeCategory.setMentee(this);
+	}
+
+	public Mentee(Long menteeId, String userId, String password, String menteeName, String gender, LocalDate birth,
+		String email, String phoneNumber, String address, Boolean employmentIdea, Boolean active,
+		Boolean isEmailAlarmAgreed, String paymentMethod, LocalDateTime createdAt, Set<Reports> reports,
+		Set<Conversation> conversations, Set<MenteeClass> menteeClasses, Set<MenteeCategory> menteeCategories,
+		Set<Review> reviews) {
+		this.menteeId = menteeId;
+		this.userId = userId;
+		this.password = password;
+		this.menteeName = menteeName;
+		this.gender = gender;
+		this.birth = birth;
+		this.email = email;
+		this.phoneNumber = phoneNumber;
+		this.address = address;
+		this.employmentIdea = employmentIdea;
+		this.active = active;
+		this.isEmailAlarmAgreed = isEmailAlarmAgreed;
+		this.paymentMethod = paymentMethod;
+		this.createdAt = createdAt;
+		this.reports = reports;
+		this.conversations = conversations;
+		this.menteeClasses = menteeClasses;
+		this.menteeCategories = menteeCategories;
+		this.reviews = reviews;
 	}
 }
 

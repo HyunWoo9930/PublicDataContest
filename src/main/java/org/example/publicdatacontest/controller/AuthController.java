@@ -16,8 +16,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.webjars.NotFoundException;
 
@@ -80,5 +82,18 @@ public class AuthController {
 	public ResponseEntity<?> getAlMenteeInfo() {
 		List<MenteeResponse> allMenteeInfo = authService.getAllMenteeInfo();
 		return ResponseEntity.ok(allMenteeInfo);
+	}
+
+	@PutMapping("/register_pay")
+	public ResponseEntity<?> registerPay(
+		@AuthenticationPrincipal UserDetails userDetails,
+		@RequestParam(value = "payment") String payment
+	) {
+		try {
+			authService.registerPay(userDetails, payment);
+			return ResponseEntity.ok("success");
+		} catch (RuntimeException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		}
 	}
 }

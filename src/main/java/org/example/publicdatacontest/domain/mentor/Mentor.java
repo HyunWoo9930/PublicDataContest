@@ -51,6 +51,7 @@ public class Mentor {
 	private Boolean reemploymentIdea;
 	private Boolean active;
 	private Boolean isEmailAlarmAgreed;
+	private String paymentMethod;
 
 	@CreatedDate
 	@Column(updatable = false)

@@ -181,4 +181,15 @@ public class AuthService {
 	private MenteeResponse convertToDTO(Mentee mentee) {
 		return new MenteeResponse(mentee);
 	}
+
+	public void registerPay(UserDetails userDetails, String payment) {
+		mentorRepository.findByUserId(userDetails.getUsername()).ifPresent(mentor -> {
+			mentor.setPaymentMethod(payment);
+			mentorRepository.save(mentor);
+		});
+		menteeRepository.findByUserId(userDetails.getUsername()).ifPresent(mentee -> {
+			mentee.setPaymentMethod(payment);
+			menteeRepository.save(mentee);
+		});
+	}
 }
