@@ -66,5 +66,10 @@ public class Mentee {
 
 	@OneToMany(mappedBy = "mentee")
 	private Set<Review> reviews;
+
+	public void addMenteeCategory(MenteeCategory menteeCategory) {
+		this.menteeCategories.add(menteeCategory);
+		menteeCategory.setMentee(this);
+	}
 }
 

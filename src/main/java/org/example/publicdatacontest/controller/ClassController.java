@@ -50,10 +50,11 @@ public class ClassController {
 		return ResponseEntity.ok(mentorClasses);
 	}
 
+
 	@GetMapping("/mentoring_detail")
 	@Operation(summary = "멘토링 상세 조회")
 	public ResponseEntity<?> mentoringDetail(
-		@RequestParam(value = "classId") Long classId
+			@RequestParam(value = "classId") Long classId
 	) {
 		try {
 			MentorClassResponse mentorClassResponse = classService.mentoringDetail(classId);
@@ -61,6 +62,17 @@ public class ClassController {
 		} catch (RuntimeException e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		}
+	}
 
+	@GetMapping("/category_filtering")
+	public ResponseEntity<?> mentoringListByCategory(@RequestParam(value = "categoryId") Long categoryId) {
+		List<MentorClassResponse> mentorClasses = classService.mentoringListByCategory(categoryId);
+		return ResponseEntity.ok(mentorClasses);
+	}
+
+	@GetMapping("/subCategory_filtering")
+	public ResponseEntity<?> mentoringListBySubCategory(@RequestParam(value = "subCategoryId") Long subCategoryId) {
+		List<MentorClassResponse> mentorClasses = classService.mentoringListBySubCategory(subCategoryId);
+		return ResponseEntity.ok(mentorClasses);
 	}
 }

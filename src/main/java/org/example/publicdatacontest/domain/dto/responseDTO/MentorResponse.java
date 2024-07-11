@@ -2,10 +2,18 @@ package org.example.publicdatacontest.domain.dto.responseDTO;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.example.publicdatacontest.domain.chat.Conversation;
+import org.example.publicdatacontest.domain.mentor.Mentor;
+import org.example.publicdatacontest.domain.mentor.MentorBadge;
+import org.example.publicdatacontest.domain.mentor.MentorCertificate;
+import org.example.publicdatacontest.domain.mentor.MentorClass;
+import org.example.publicdatacontest.domain.util.Reports;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -29,32 +37,29 @@ public class MentorResponse {
 	private Set<Long> mentorClassIds;
 	private Set<Long> reportIds;
 	private Set<Long> conversationIds;
-	private Set<Long> mentorCategoryIds;
 
-	public MentorResponse(Long mentorId, String userId, String mentorName, String gender, LocalDate birth, String email,
-		String phoneNumber, String address, Long mentoringCount, Long studentCount, Boolean reemploymentIdea,
-		Boolean active, Boolean isEmailAlarmAgreed, LocalDateTime createdAt, Set<Long> certificateIds,
-		Set<Long> badgeIds,
-		Set<Long> mentorClassIds, Set<Long> reportIds, Set<Long> conversationIds, Set<Long> mentorCategoryIds) {
-		this.mentorId = mentorId;
-		this.userId = userId;
-		this.mentorName = mentorName;
-		this.gender = gender;
-		this.birth = birth;
-		this.email = email;
-		this.phoneNumber = phoneNumber;
-		this.address = address;
-		this.mentoringCount = mentoringCount;
-		this.studentCount = studentCount;
-		this.reemploymentIdea = reemploymentIdea;
-		this.active = active;
-		this.isEmailAlarmAgreed = isEmailAlarmAgreed;
-		this.createdAt = createdAt;
-		this.certificateIds = certificateIds;
-		this.badgeIds = badgeIds;
-		this.mentorClassIds = mentorClassIds;
-		this.reportIds = reportIds;
-		this.conversationIds = conversationIds;
-		this.mentorCategoryIds = mentorCategoryIds;
+	private List<MentorCategoryResponse> mentorCategoryNames;
+
+	public MentorResponse(Mentor mentor) {
+		this.mentorId = mentor.getMentorId();
+		this.userId = mentor.getUserId();
+		this.mentorName = mentor.getMentorName();
+		this.gender = mentor.getGender();
+		this.birth = mentor.getBirth();
+		this.email = mentor.getEmail();
+		this.phoneNumber = mentor.getPhoneNumber();
+		this.address = mentor.getAddress();
+		this.mentoringCount = mentor.getMentoringCount();
+		this.studentCount = mentor.getStudentCount();
+		this.reemploymentIdea = mentor.getReemploymentIdea();
+		this.active = mentor.getActive();
+		this.isEmailAlarmAgreed = mentor.getIsEmailAlarmAgreed();
+		this.createdAt = mentor.getCreatedAt();
+		this.certificateIds = mentor.getCertificates().stream().map(MentorCertificate::getCertificateId).collect(Collectors.toSet());
+		this.badgeIds = mentor.getBadges().stream().map(MentorBadge::getBadgeId).collect(Collectors.toSet());
+		this.mentorClassIds = mentor.getMentorClasses().stream().map(MentorClass::getClassId).collect(Collectors.toSet());
+		this.reportIds = mentor.getReports().stream().map(Reports::getReportId).collect(Collectors.toSet());
+		this.conversationIds = mentor.getConversations().stream().map(Conversation::getConversationId).collect(Collectors.toSet());
+		this.mentorCategoryNames = mentor.getMentorCategories().stream().map(MentorCategoryResponse::new).toList();
 	}
 }

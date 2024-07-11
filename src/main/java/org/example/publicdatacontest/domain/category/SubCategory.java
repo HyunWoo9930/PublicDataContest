@@ -39,4 +39,9 @@ public class SubCategory {
 		this.mentorCategories.add(mentorCategory);
 		mentorCategory.setSubCategory(this);
 	}
+
+	public void addMenteeCategory(MenteeCategory menteeCategory) {
+		this.menteeCategories.add(menteeCategory);
+		menteeCategory.setSubCategory(this);
+	}
 }
