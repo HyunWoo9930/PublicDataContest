@@ -12,7 +12,7 @@ import java.util.Set;
 @Transactional
 @Service
 @RequiredArgsConstructor
-public class SubCategoryQueryService {
+public class SubCategoryService {
 
     private final SubCategoryRepository subCategoryRepository;
 

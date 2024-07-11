@@ -170,28 +170,7 @@ public class AuthService {
 	}
 
 	private MentorResponse convertToDTO(Mentor mentor) {
-		return new MentorResponse(
-			mentor.getMentorId(),
-			mentor.getUserId(),
-			mentor.getMentorName(),
-			mentor.getGender(),
-			mentor.getBirth(),
-			mentor.getEmail(),
-			mentor.getPhoneNumber(),
-			mentor.getAddress(),
-			mentor.getMentoringCount(),
-			mentor.getStudentCount(),
-			mentor.getReemploymentIdea(),
-			mentor.getActive(),
-			mentor.getIsEmailAlarmAgreed(),
-			mentor.getCreatedAt(),
-			mentor.getCertificates().stream().map(MentorCertificate::getCertificateId).collect(Collectors.toSet()),
-			mentor.getBadges().stream().map(MentorBadge::getBadgeId).collect(Collectors.toSet()),
-			mentor.getMentorClasses().stream().map(MentorClass::getClassId).collect(Collectors.toSet()),
-			mentor.getReports().stream().map(Reports::getReportId).collect(Collectors.toSet()),
-			mentor.getConversations().stream().map(Conversation::getConversationId).collect(Collectors.toSet()),
-			mentor.getMentorCategories().stream().map(MentorCategory::getSubCategoryId).collect(Collectors.toSet())
-		);
+		return new MentorResponse(mentor);
 	}
 
 	public MenteeResponse getMenteeById(Long id) {
@@ -200,24 +179,6 @@ public class AuthService {
 	}
 
 	private MenteeResponse convertToDTO(Mentee mentee) {
-		return new MenteeResponse(
-			mentee.getMenteeId(),
-			mentee.getUserId(),
-			mentee.getMenteeName(),
-			mentee.getGender(),
-			mentee.getBirth(),
-			mentee.getEmail(),
-			mentee.getPhoneNumber(),
-			mentee.getAddress(),
-			mentee.getEmploymentIdea(),
-			mentee.getActive(),
-			mentee.getIsEmailAlarmAgreed(),
-			mentee.getCreatedAt(),
-			mentee.getReports().stream().map(Reports::getReportId).collect(Collectors.toSet()),
-			mentee.getConversations().stream().map(Conversation::getConversationId).collect(Collectors.toSet()),
-			mentee.getMenteeClasses().stream().map(MenteeClass::getClassId).collect(Collectors.toSet()),
-			mentee.getMenteeCategories().stream().map(MenteeCategory::getSubCategoryId).collect(Collectors.toSet()),
-			mentee.getReviews().stream().map(Review::getReviewId).collect(Collectors.toSet())
-		);
+		return new MenteeResponse(mentee);
 	}
 }
