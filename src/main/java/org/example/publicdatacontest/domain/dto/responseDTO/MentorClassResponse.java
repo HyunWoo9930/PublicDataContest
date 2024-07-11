@@ -25,6 +25,7 @@ public class MentorClassResponse {
 	public MentorClassResponse(MentorClass mentorClass) {
 		this.classId = mentorClass.getClassId();
 		this.mentorName = mentorClass.getMentor().getMentorName();
+		this.mentorId = mentorClass.getMentor().getMentorId();
 		this.subcategoryName = mentorClass.getSubCategory().getName();
 		this.categoryName = mentorClass.getSubCategory().getCategory().getName();
 		this.name = mentorClass.getName();
