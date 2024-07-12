@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.example.publicdatacontest.domain.chat.Conversation;
 
 @Setter
 @Getter
@@ -13,10 +14,10 @@ public class ConversationResponse {
 	private String menteeName;
 	private LocalDateTime startDate;
 
-	public ConversationResponse(Long conversationId, String mentorName, String menteeName, LocalDateTime startDate) {
-		this.conversationId = conversationId;
-		this.mentorName = mentorName;
-		this.menteeName = menteeName;
-		this.startDate = startDate;
+	public ConversationResponse(Conversation conversation) {
+		this.conversationId = conversation.getConversationId();
+		this.mentorName = conversation.getMentor().getMentorName();
+		this.menteeName = conversation.getMentee().getMenteeName();
+		this.startDate = conversation.getStartDate();
 	}
 }

@@ -84,18 +84,7 @@ public class ChatService {
 
 		chatRepository.save(chat);
 
-		return new ChatResponse(
-			chat.getMessageId(),
-			chat.getConversation().getConversationId(),
-			chat.getSenderId(),
-			chat.getSenderType(),
-			chat.getSenderName(),
-			chat.getReceiverId(),
-			chat.getReceiverType(),
-			chat.getReceiverName(),
-			chat.getContent(),
-			chat.getTimestamp()
-		);
+		return new ChatResponse(chat);
 	}
 
 	public List<ConversationResponse> getChatList(UserDetails userDetails) {
@@ -117,12 +106,7 @@ public class ChatService {
 
 	private List<ConversationResponse> getConversationResponses(List<Conversation> conversations) {
 		return conversations.stream()
-			.map(conversation -> new ConversationResponse(
-				conversation.getConversationId(),
-				conversation.getMentor().getMentorName(),
-				conversation.getMentee().getMenteeName(),
-				conversation.getStartDate()
-			))
+			.map(ConversationResponse::new)
 			.collect(Collectors.toList());
 	}
 
@@ -148,18 +132,7 @@ public class ChatService {
 		}
 
 		return chatRepository.findAllByConversationConversationId(conversationId).stream()
-			.map(chat -> new ChatResponse(
-				chat.getMessageId(),
-				chat.getConversation().getConversationId(),
-				chat.getSenderId(),
-				chat.getSenderType(),
-				chat.getSenderName(),
-				chat.getReceiverId(),
-				chat.getReceiverType(),
-				chat.getReceiverName(),
-				chat.getContent(),
-				chat.getTimestamp()
-			))
+			.map(ChatResponse::new)
 			.collect(Collectors.toList());
 	}
 }

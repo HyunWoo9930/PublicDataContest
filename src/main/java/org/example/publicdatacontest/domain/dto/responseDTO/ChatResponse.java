@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.example.publicdatacontest.domain.chat.Chat;
 
 @Setter
 @Getter
@@ -19,17 +20,16 @@ public class ChatResponse {
 	private String content;
 	private LocalDateTime timestamp;
 
-	public ChatResponse(Long messageId, Long conversationId, Long senderId, String senderType, String senderName,
-		Long receiverId, String receiverType, String receiverName, String content, LocalDateTime timestamp) {
-		this.messageId = messageId;
-		this.conversationId = conversationId;
-		this.senderId = senderId;
-		this.senderType = senderType;
-		this.senderName = senderName;
-		this.receiverId = receiverId;
-		this.receiverType = receiverType;
-		this.receiverName = receiverName;
-		this.content = content;
-		this.timestamp = timestamp;
+	public ChatResponse(Chat chat) {
+		this.messageId = chat.getMessageId();
+		this.conversationId = chat.getConversation().getConversationId();
+		this.senderId = chat.getSenderId();
+		this.senderType = chat.getSenderType();
+		this.senderName = chat.getSenderName();
+		this.receiverId = chat.getReceiverId();
+		this.receiverType = chat.getReceiverType();
+		this.receiverName = chat.getReceiverName();
+		this.content = chat.getContent();
+		this.timestamp = chat.getTimestamp();
 	}
 }
