@@ -31,6 +31,7 @@ public class MenteeResponse {
 	private Boolean employmentIdea;
 	private Boolean active;
 	private Boolean isEmailAlarmAgreed;
+	private String payment;
 	private LocalDateTime createdAt;
 	private Set<Long> reportIds;
 	private Set<Long> conversationIds;
@@ -51,6 +52,7 @@ public class MenteeResponse {
 		this.employmentIdea = mentee.getEmploymentIdea();
 		this.active = mentee.getActive();
 		this.isEmailAlarmAgreed = mentee.getIsEmailAlarmAgreed();
+		this.payment = mentee.getPaymentMethod();
 		this.createdAt = mentee.getCreatedAt();
 		this.reportIds = mentee.getReports().stream().map(Reports::getReportId).collect(Collectors.toSet());
 		this.conversationIds = mentee.getConversations().stream().map(Conversation::getConversationId).collect(Collectors.toSet());

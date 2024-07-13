@@ -31,6 +31,7 @@ public class MentorResponse {
 	private Boolean reemploymentIdea;
 	private Boolean active;
 	private Boolean isEmailAlarmAgreed;
+	private String payment;
 	private LocalDateTime createdAt;
 	private Set<Long> certificateIds;
 	private Set<Long> badgeIds;
@@ -54,6 +55,7 @@ public class MentorResponse {
 		this.reemploymentIdea = mentor.getReemploymentIdea();
 		this.active = mentor.getActive();
 		this.isEmailAlarmAgreed = mentor.getIsEmailAlarmAgreed();
+		this.payment = mentor.getPaymentMethod();
 		this.createdAt = mentor.getCreatedAt();
 		this.certificateIds = mentor.getCertificates().stream().map(MentorCertificate::getCertificateId).collect(Collectors.toSet());
 		this.badgeIds = mentor.getBadges().stream().map(MentorBadge::getBadgeId).collect(Collectors.toSet());
