@@ -4,9 +4,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.example.publicdatacontest.domain.PaymentStatus;
 import org.example.publicdatacontest.domain.chat.Chat;
 import org.example.publicdatacontest.domain.chat.Conversation;
 import org.example.publicdatacontest.domain.dto.requestDTO.ChattingRequest;
+import org.example.publicdatacontest.domain.dto.requestDTO.ConversationUpdatePaymentStatusRequest;
+import org.example.publicdatacontest.domain.dto.responseDTO.ChatDetailResponse;
 import org.example.publicdatacontest.domain.dto.responseDTO.ChatResponse;
 import org.example.publicdatacontest.domain.dto.responseDTO.ConversationResponse;
 import org.example.publicdatacontest.repository.chat.ChatRepository;
@@ -84,7 +87,7 @@ public class ChatService {
 
 		chatRepository.save(chat);
 
-		return new ChatResponse(chat);
+		return new ChatResponse(chat, PaymentStatus.IDLE);
 	}
 
 	public List<ConversationResponse> getChatList(UserDetails userDetails) {
@@ -110,7 +113,7 @@ public class ChatService {
 			.collect(Collectors.toList());
 	}
 
-	public List<ChatResponse> getChatDetail(UserDetails userDetails, Long conversationId) {
+	public ChatDetailResponse getChatDetail(UserDetails userDetails, Long conversationId) {
 		if (!userDetails.isAccountNonExpired()) {
 			throw new RuntimeException("계정이 만료되었습니다.");
 		}
@@ -131,8 +134,19 @@ public class ChatService {
 			}
 		}
 
-		return chatRepository.findAllByConversationConversationId(conversationId).stream()
-			.map(ChatResponse::new)
+		List<ChatResponse> chatResponses = chatRepository.findAllByConversationConversationId(conversationId).stream()
+			.map(chat -> new ChatResponse(chat, conversation.getPaymentStatus()))
 			.collect(Collectors.toList());
+
+		return new ChatDetailResponse(chatResponses, conversation.getPaymentStatus());
+	}
+
+	public void updatePaymentStatus(ConversationUpdatePaymentStatusRequest conversationUpdatePaymentStatusRequest) {
+		Conversation conversation = conversationRepository.findById(
+				conversationUpdatePaymentStatusRequest.getConversationId())
+			.orElseThrow(() -> new NotFoundException("conversation이 없습니다."));
+
+		conversation.setPaymentStatus(conversationUpdatePaymentStatusRequest.getPaymentStatus());
+		conversationRepository.save(conversation);
 	}
 }

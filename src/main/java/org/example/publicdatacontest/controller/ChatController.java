@@ -3,6 +3,8 @@ package org.example.publicdatacontest.controller;
 import java.util.List;
 
 import org.example.publicdatacontest.domain.dto.requestDTO.ChattingRequest;
+import org.example.publicdatacontest.domain.dto.requestDTO.ConversationUpdatePaymentStatusRequest;
+import org.example.publicdatacontest.domain.dto.responseDTO.ChatDetailResponse;
 import org.example.publicdatacontest.domain.dto.responseDTO.ChatResponse;
 import org.example.publicdatacontest.domain.dto.responseDTO.ConversationResponse;
 import org.example.publicdatacontest.domain.dto.responseDTO.MakeChatResponse;
@@ -14,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -85,8 +88,22 @@ public class ChatController {
 		@RequestParam("conversationId") Long conversationId
 	) {
 		try {
-			List<ChatResponse> chatList = chatService.getChatDetail(userDetails, conversationId);
-			return ResponseEntity.ok(chatList);
+			ChatDetailResponse chatDetailResponse = chatService.getChatDetail(userDetails, conversationId);
+			return ResponseEntity.ok(chatDetailResponse);
+		} catch (NotFoundException e) {
+			return ResponseEntity.status(404).body(e.getMessage());
+		} catch (RuntimeException e) {
+			return ResponseEntity.status(400).body(e.getMessage());
+		}
+	}
+
+	@PutMapping("/update_payment_status")
+	public ResponseEntity<?> updatePaymentStatus(
+		@RequestBody ConversationUpdatePaymentStatusRequest conversationUpdatePaymentStatusRequest
+	) {
+		try {
+			chatService.updatePaymentStatus(conversationUpdatePaymentStatusRequest);
+			return ResponseEntity.ok("success");
 		} catch (NotFoundException e) {
 			return ResponseEntity.status(404).body(e.getMessage());
 		} catch (RuntimeException e) {

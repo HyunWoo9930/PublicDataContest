@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import org.example.publicdatacontest.domain.PaymentStatus;
 import org.example.publicdatacontest.domain.mentee.Mentee;
 import org.example.publicdatacontest.domain.mentor.Mentor;
 
@@ -27,6 +28,8 @@ public class Conversation {
 	private Mentee mentee;
 
 	private LocalDateTime startDate;
+
+	private PaymentStatus paymentStatus;
 
 	@OneToMany(mappedBy = "conversation")
 	private Set<Chat> chats;
