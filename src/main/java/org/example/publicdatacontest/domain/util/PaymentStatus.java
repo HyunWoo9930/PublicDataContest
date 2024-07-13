@@ -1,10 +1,8 @@
-package org.example.publicdatacontest.domain;
+package org.example.publicdatacontest.domain.util;
 
 public enum PaymentStatus {
 	IDLE,
 	PAYMENT_REQUESTED,
 	PAYMENT_COMPLETED,
-	DAILY_MENTORING_STARTED,
-	DAILY_MENTORING_ENDED,
 	FINAL_MENTORING_ENDED
 }

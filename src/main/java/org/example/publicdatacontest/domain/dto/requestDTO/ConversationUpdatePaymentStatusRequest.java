@@ -1,6 +1,6 @@
 package org.example.publicdatacontest.domain.dto.requestDTO;
 
-import org.example.publicdatacontest.domain.PaymentStatus;
+import org.example.publicdatacontest.domain.util.PaymentStatus;
 
 import lombok.Getter;
 import lombok.Setter;

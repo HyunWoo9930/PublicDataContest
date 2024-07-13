@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.example.publicdatacontest.domain.util.PaymentStatus;
 import org.example.publicdatacontest.domain.chat.Chat;
 import org.example.publicdatacontest.domain.chat.Conversation;
 import org.example.publicdatacontest.domain.chat.PaymentStatusHistory;
@@ -12,6 +13,7 @@ import org.example.publicdatacontest.domain.dto.requestDTO.ConversationUpdatePay
 import org.example.publicdatacontest.domain.dto.responseDTO.ChatDetailResponse;
 import org.example.publicdatacontest.domain.dto.responseDTO.ChatResponse;
 import org.example.publicdatacontest.domain.dto.responseDTO.ConversationResponse;
+import org.example.publicdatacontest.domain.dto.responseDTO.PaymentStatusHistoryResponse;
 import org.example.publicdatacontest.repository.chat.ChatRepository;
 import org.example.publicdatacontest.repository.chat.ConversationRepository;
 import org.example.publicdatacontest.repository.mentee.MenteeRepository;
@@ -137,7 +139,18 @@ public class ChatService {
 			.map(ChatResponse::new)
 			.collect(Collectors.toList());
 
-		return new ChatDetailResponse(chatResponses, conversation.getPaymentStatusHistories());
+		List<PaymentStatusHistoryResponse> paymentStatusHistoryResponses = conversation.getPaymentStatusHistories()
+			.stream()
+			.map(paymentStatusHistory -> new PaymentStatusHistoryResponse(
+				paymentStatusHistory.getId(),
+				conversation.getConversationId(),
+				paymentStatusHistory.getPaymentStatus(),
+				paymentStatusHistory.getTimestamp(),
+				paymentStatusHistory.getSender()
+			))
+			.toList();
+
+		return new ChatDetailResponse(chatResponses, paymentStatusHistoryResponses);
 	}
 
 	public void updatePaymentStatus(ConversationUpdatePaymentStatusRequest conversationUpdatePaymentStatusRequest) {
@@ -145,9 +158,19 @@ public class ChatService {
 				conversationUpdatePaymentStatusRequest.getConversationId())
 			.orElseThrow(() -> new NotFoundException("conversation이 없습니다."));
 
-		conversation.addPaymentStatusHistory(
-			new PaymentStatusHistory(conversation, conversationUpdatePaymentStatusRequest.getPaymentStatus(),
-				LocalDateTime.now()));
+		if (conversationUpdatePaymentStatusRequest.getPaymentStatus() == PaymentStatus.PAYMENT_COMPLETED) {
+			conversation.addPaymentStatusHistory(
+				new PaymentStatusHistory(conversation, conversationUpdatePaymentStatusRequest.getPaymentStatus(),
+					LocalDateTime.now(), "mentee"));
+		} else if (conversationUpdatePaymentStatusRequest.getPaymentStatus() == PaymentStatus.PAYMENT_REQUESTED) {
+			conversation.addPaymentStatusHistory(
+				new PaymentStatusHistory(conversation, conversationUpdatePaymentStatusRequest.getPaymentStatus(),
+					LocalDateTime.now(), "mentor"));
+		} else {
+			conversation.addPaymentStatusHistory(
+				new PaymentStatusHistory(conversation, conversationUpdatePaymentStatusRequest.getPaymentStatus(),
+					LocalDateTime.now(), ""));
+		}
 
 		conversationRepository.save(conversation);
 	}

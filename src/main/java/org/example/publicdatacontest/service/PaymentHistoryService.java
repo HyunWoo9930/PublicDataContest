@@ -69,7 +69,6 @@ public class PaymentHistoryService {
 
 		menteeClass = menteeClassRepository.save(menteeClass);
 
-		// PaymentHistory 생성
 		PaymentHistory paymentHistory = new PaymentHistory();
 		paymentHistory.setMenteeClass(menteeClass);
 		paymentHistory.setPaymentDate(LocalDateTime.now());
@@ -82,7 +81,6 @@ public class PaymentHistoryService {
 			menteeClass.setPaymentHistories(new HashSet<>());
 		}
 		menteeClass.getPaymentHistories().add(paymentHistory);
-
 	}
 
 	public List<PaymentResponse> getPaymentHistory(UserDetails userDetails) {

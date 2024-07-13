@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import java.time.LocalDateTime;
-import org.example.publicdatacontest.domain.PaymentStatus;
+import org.example.publicdatacontest.domain.util.PaymentStatus;
 
 @Entity
 @Getter
@@ -21,13 +21,15 @@ public class PaymentStatusHistory {
 	@Enumerated(EnumType.STRING)
 	private PaymentStatus paymentStatus;
 	private LocalDateTime timestamp;
+	private String sender;
 
 	public PaymentStatusHistory() {
 	}
 
-	public PaymentStatusHistory(Conversation conversation, PaymentStatus paymentStatus, LocalDateTime timestamp) {
+	public PaymentStatusHistory(Conversation conversation, PaymentStatus paymentStatus, LocalDateTime timestamp, String sender) {
 		this.conversation = conversation;
 		this.paymentStatus = paymentStatus;
 		this.timestamp = timestamp;
+		this.sender = sender;
 	}
 }

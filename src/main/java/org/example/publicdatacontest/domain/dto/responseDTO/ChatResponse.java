@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 
-import org.example.publicdatacontest.domain.PaymentStatus;
 import org.example.publicdatacontest.domain.chat.Chat;
 
 @Setter
