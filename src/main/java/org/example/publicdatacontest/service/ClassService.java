@@ -143,4 +143,13 @@ public class ClassService {
 		menteeClass.get().setUsedCount(usedCount);
 		menteeClassRepository.save(menteeClass.get());
 	}
+
+	public void finalFinishMentoring(Long classId) {
+		MentorClass mentorClass = mentorClassRepository.findById(classId)
+			.orElseThrow(() -> new RuntimeException("해당 클래스가 존재하지 않습니다."));
+
+		Long studentCount = mentorClass.getMentor().getStudentCount();
+		mentorClass.getMentor().setStudentCount(++studentCount);
+		mentorClassRepository.save(mentorClass);
+	}
 }

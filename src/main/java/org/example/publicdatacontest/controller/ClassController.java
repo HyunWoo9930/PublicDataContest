@@ -89,4 +89,16 @@ public class ClassController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		}
 	}
+
+	@PutMapping("/final_finish_mentoring")
+	public ResponseEntity<?> finalFinishMentoring(
+		@RequestParam(value = "classId") Long classId
+	) {
+		try {
+			classService.finalFinishMentoring(classId);
+			return ResponseEntity.ok("success");
+		} catch (RuntimeException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		}
+	}
 }
