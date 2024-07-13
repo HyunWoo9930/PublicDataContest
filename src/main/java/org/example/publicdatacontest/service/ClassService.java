@@ -5,11 +5,16 @@ import java.util.List;
 import java.util.Optional;
 
 import org.example.publicdatacontest.domain.category.SubCategory;
-import org.example.publicdatacontest.domain.mentor.Mentor;
-import org.example.publicdatacontest.domain.mentor.MentorClass;
 import org.example.publicdatacontest.domain.dto.requestDTO.MentorClassRequest;
 import org.example.publicdatacontest.domain.dto.responseDTO.MentorClassResponse;
+import org.example.publicdatacontest.domain.mentee.Mentee;
+import org.example.publicdatacontest.domain.mentee.MenteeClass;
+import org.example.publicdatacontest.domain.mentee.MenteeClassId;
+import org.example.publicdatacontest.domain.mentor.Mentor;
+import org.example.publicdatacontest.domain.mentor.MentorClass;
 import org.example.publicdatacontest.repository.category.SubCategoryRepository;
+import org.example.publicdatacontest.repository.mentee.MenteeClassRepository;
+import org.example.publicdatacontest.repository.mentee.MenteeRepository;
 import org.example.publicdatacontest.repository.mentor.MentorClassRepository;
 import org.example.publicdatacontest.repository.mentor.MentorRepository;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,11 +31,18 @@ public class ClassService {
 
 	private final SubCategoryRepository subCategoryRepository;
 
+	private final MenteeRepository menteeRepository;
+
+	private final MenteeClassRepository menteeClassRepository;
+
 	public ClassService(MentorRepository mentorRepository, MentorClassRepository mentorClassRepository,
-		SubCategoryRepository subCategoryRepository) {
+		SubCategoryRepository subCategoryRepository, MenteeRepository menteeRepository,
+		MenteeClassRepository menteeClassRepository) {
 		this.mentorRepository = mentorRepository;
 		this.mentorClassRepository = mentorClassRepository;
 		this.subCategoryRepository = subCategoryRepository;
+		this.menteeRepository = menteeRepository;
+		this.menteeClassRepository = menteeClassRepository;
 	}
 
 	@Transactional
@@ -76,15 +88,15 @@ public class ClassService {
 
 	public MentorClassResponse mentoringDetail(Long classId) {
 		MentorClass mentorClass = mentorClassRepository.findById(classId)
-				.orElseThrow(() -> new RuntimeException("해당 클래스가 존재하지 않습니다."));
+			.orElseThrow(() -> new RuntimeException("해당 클래스가 존재하지 않습니다."));
 
 		return new MentorClassResponse(mentorClass);
 	}
 
 	public List<MentorClassResponse> mentoringListByCategory(Long categoryId) {
 		List<MentorClass> classes = mentorClassRepository.findAll().stream()
-				.filter(i -> i.getSubCategory().getCategory().getCategoryId().equals(categoryId))
-				.toList();
+			.filter(i -> i.getSubCategory().getCategory().getCategoryId().equals(categoryId))
+			.toList();
 
 		List<MentorClassResponse> mentorClassResponses = new ArrayList<>();
 
@@ -98,8 +110,8 @@ public class ClassService {
 
 	public List<MentorClassResponse> mentoringListBySubCategory(Long subCategoryId) {
 		List<MentorClass> classes = mentorClassRepository.findAll().stream()
-				.filter(i -> i.getSubCategory().getSubCategoryId().equals(subCategoryId))
-				.toList();
+			.filter(i -> i.getSubCategory().getSubCategoryId().equals(subCategoryId))
+			.toList();
 
 		List<MentorClassResponse> mentorClassResponses = new ArrayList<>();
 
@@ -109,5 +121,26 @@ public class ClassService {
 		});
 
 		return mentorClassResponses;
+	}
+
+	public void updateMentoring(UserDetails userDetails, Long classId) {
+		Mentee mentee = menteeRepository.findByUserId(userDetails.getUsername())
+			.orElseThrow(() -> new RuntimeException("멘티가 아니거나, 유저가 없습니다."));
+
+		MentorClass mentorClass = mentorClassRepository.findById(classId).orElseThrow(
+			() -> new RuntimeException("해당 클래스가 존재하지 않습니다."));
+		MenteeClassId menteeClassId = new MenteeClassId(mentorClass.getClassId(), mentee.getMenteeId());
+		Optional<MenteeClass> menteeClass = menteeClassRepository.findById(menteeClassId);
+		if (menteeClass.isEmpty()) {
+			throw new RuntimeException("해당 클래스가 존재하지 않습니다.");
+		}
+
+		Long usedCount = menteeClass.get().getUsedCount();
+		Long count = menteeClass.get().getCount();
+		if (count <= ++usedCount) {
+			throw new RuntimeException("수강 가능 횟수를 초과하였습니다.");
+		}
+		menteeClass.get().setUsedCount(usedCount);
+		menteeClassRepository.save(menteeClass.get());
 	}
 }

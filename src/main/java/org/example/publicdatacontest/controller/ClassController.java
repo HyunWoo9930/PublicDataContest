@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -74,5 +75,18 @@ public class ClassController {
 	public ResponseEntity<?> mentoringListBySubCategory(@RequestParam(value = "subCategoryId") Long subCategoryId) {
 		List<MentorClassResponse> mentorClasses = classService.mentoringListBySubCategory(subCategoryId);
 		return ResponseEntity.ok(mentorClasses);
+	}
+
+	@PutMapping("/update_mentoring")
+	public ResponseEntity<?> updateMentoring(
+		@AuthenticationPrincipal UserDetails userDetails,
+		@RequestParam(value = "classId") Long classId
+	) {
+		try {
+			classService.updateMentoring(userDetails, classId);
+			return ResponseEntity.ok("success");
+		} catch (RuntimeException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		}
 	}
 }

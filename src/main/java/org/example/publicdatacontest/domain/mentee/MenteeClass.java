@@ -3,12 +3,11 @@ package org.example.publicdatacontest.domain.mentee;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
-import org.example.publicdatacontest.domain.mentee.Mentee;
-import org.example.publicdatacontest.domain.mentee.MenteeClassId;
 import org.example.publicdatacontest.domain.mentor.MentorClass;
+import org.example.publicdatacontest.domain.paymentHistory.PaymentHistory;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -34,4 +33,7 @@ public class MenteeClass {
 	private Long count;
 	private Long usedCount;
 	private LocalDateTime timestamp;
+
+	@OneToMany(mappedBy = "menteeClass")
+	private Set<PaymentHistory> paymentHistories;
 }

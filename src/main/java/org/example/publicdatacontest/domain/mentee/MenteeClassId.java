@@ -17,11 +17,9 @@ public class MenteeClassId implements Serializable {
 
 	@Override
 	public boolean equals(Object o) {
-		if (this == o)
-			return true;
-		if (o == null || getClass() != o.getClass())
-			return false;
-		MenteeClassId that = (MenteeClassId)o;
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		MenteeClassId that = (MenteeClassId) o;
 		return Objects.equals(classId, that.classId) &&
 			Objects.equals(menteeId, that.menteeId);
 	}
