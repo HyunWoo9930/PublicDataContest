@@ -4,9 +4,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.example.publicdatacontest.domain.PaymentStatus;
 import org.example.publicdatacontest.domain.chat.Chat;
 import org.example.publicdatacontest.domain.chat.Conversation;
+import org.example.publicdatacontest.domain.chat.PaymentStatusHistory;
 import org.example.publicdatacontest.domain.dto.requestDTO.ChattingRequest;
 import org.example.publicdatacontest.domain.dto.requestDTO.ConversationUpdatePaymentStatusRequest;
 import org.example.publicdatacontest.domain.dto.responseDTO.ChatDetailResponse;
@@ -86,8 +86,7 @@ public class ChatService {
 		);
 
 		chatRepository.save(chat);
-
-		return new ChatResponse(chat, PaymentStatus.IDLE);
+		return new ChatResponse(chat);
 	}
 
 	public List<ConversationResponse> getChatList(UserDetails userDetails) {
@@ -135,10 +134,10 @@ public class ChatService {
 		}
 
 		List<ChatResponse> chatResponses = chatRepository.findAllByConversationConversationId(conversationId).stream()
-			.map(chat -> new ChatResponse(chat, conversation.getPaymentStatus()))
+			.map(ChatResponse::new)
 			.collect(Collectors.toList());
 
-		return new ChatDetailResponse(chatResponses, conversation.getPaymentStatus());
+		return new ChatDetailResponse(chatResponses, conversation.getPaymentStatusHistories());
 	}
 
 	public void updatePaymentStatus(ConversationUpdatePaymentStatusRequest conversationUpdatePaymentStatusRequest) {
@@ -146,7 +145,10 @@ public class ChatService {
 				conversationUpdatePaymentStatusRequest.getConversationId())
 			.orElseThrow(() -> new NotFoundException("conversation이 없습니다."));
 
-		conversation.setPaymentStatus(conversationUpdatePaymentStatusRequest.getPaymentStatus());
+		conversation.addPaymentStatusHistory(
+			new PaymentStatusHistory(conversation, conversationUpdatePaymentStatusRequest.getPaymentStatus(),
+				LocalDateTime.now()));
+
 		conversationRepository.save(conversation);
 	}
 }

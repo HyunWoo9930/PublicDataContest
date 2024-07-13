@@ -3,11 +3,8 @@ package org.example.publicdatacontest.domain.chat;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
-import org.example.publicdatacontest.domain.PaymentStatus;
 import org.example.publicdatacontest.domain.mentee.Mentee;
 import org.example.publicdatacontest.domain.mentor.Mentor;
-
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -29,7 +26,8 @@ public class Conversation {
 
 	private LocalDateTime startDate;
 
-	private PaymentStatus paymentStatus;
+	@OneToMany(mappedBy = "conversation", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<PaymentStatusHistory> paymentStatusHistories;
 
 	@OneToMany(mappedBy = "conversation")
 	private Set<Chat> chats;
@@ -49,6 +47,15 @@ public class Conversation {
 	}
 
 	public Conversation() {
+	}
 
+	public void addPaymentStatusHistory(PaymentStatusHistory paymentStatusHistory) {
+		this.paymentStatusHistories.add(paymentStatusHistory);
+		paymentStatusHistory.setConversation(this);
+	}
+
+	public void removePaymentStatusHistory(PaymentStatusHistory paymentStatusHistory) {
+		this.paymentStatusHistories.remove(paymentStatusHistory);
+		paymentStatusHistory.setConversation(null);
 	}
 }

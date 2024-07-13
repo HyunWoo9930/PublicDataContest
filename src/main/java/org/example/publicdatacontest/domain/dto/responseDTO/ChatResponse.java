@@ -21,9 +21,8 @@ public class ChatResponse {
 	private String receiverName;
 	private String content;
 	private LocalDateTime timestamp;
-	private PaymentStatus paymentStatus;
 
-	public ChatResponse(Chat chat, PaymentStatus paymentStatus) {
+	public ChatResponse(Chat chat) {
 		this.messageId = chat.getMessageId();
 		this.conversationId = chat.getConversation().getConversationId();
 		this.senderId = chat.getSenderId();
@@ -34,6 +33,5 @@ public class ChatResponse {
 		this.receiverName = chat.getReceiverName();
 		this.content = chat.getContent();
 		this.timestamp = chat.getTimestamp();
-		this.paymentStatus = paymentStatus;
 	}
 }
