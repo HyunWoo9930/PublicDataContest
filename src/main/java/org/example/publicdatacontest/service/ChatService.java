@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.example.publicdatacontest.domain.util.PaymentStatus;
 import org.example.publicdatacontest.domain.chat.Chat;
 import org.example.publicdatacontest.domain.chat.Conversation;
 import org.example.publicdatacontest.domain.chat.PaymentStatusHistory;
@@ -14,6 +13,7 @@ import org.example.publicdatacontest.domain.dto.responseDTO.ChatDetailResponse;
 import org.example.publicdatacontest.domain.dto.responseDTO.ChatResponse;
 import org.example.publicdatacontest.domain.dto.responseDTO.ConversationResponse;
 import org.example.publicdatacontest.domain.dto.responseDTO.PaymentStatusHistoryResponse;
+import org.example.publicdatacontest.domain.util.PaymentStatus;
 import org.example.publicdatacontest.repository.chat.ChatRepository;
 import org.example.publicdatacontest.repository.chat.ConversationRepository;
 import org.example.publicdatacontest.repository.mentee.MenteeRepository;
@@ -166,10 +166,14 @@ public class ChatService {
 			conversation.addPaymentStatusHistory(
 				new PaymentStatusHistory(conversation, conversationUpdatePaymentStatusRequest.getPaymentStatus(),
 					LocalDateTime.now(), "mentor"));
-		} else {
+		} else if (conversationUpdatePaymentStatusRequest.getPaymentStatus() == PaymentStatus.DAILY_MENTORING_STARTED
+			|| conversationUpdatePaymentStatusRequest.getPaymentStatus() == PaymentStatus.DAILY_MENTORING_ENDED
+			|| conversationUpdatePaymentStatusRequest.getPaymentStatus() == PaymentStatus.FINAL_MENTORING_ENDED) {
 			conversation.addPaymentStatusHistory(
 				new PaymentStatusHistory(conversation, conversationUpdatePaymentStatusRequest.getPaymentStatus(),
-					LocalDateTime.now(), ""));
+					LocalDateTime.now(), "mentor"));
+		} else {
+
 		}
 
 		conversationRepository.save(conversation);
