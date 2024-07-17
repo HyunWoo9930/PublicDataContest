@@ -1,29 +1,24 @@
 package org.example.publicdatacontest.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.example.publicdatacontest.domain.chat.Conversation;
+import org.example.publicdatacontest.domain.dto.requestDTO.ReportUserRequest;
 import org.example.publicdatacontest.domain.dto.responseDTO.MenteeInfoResponse;
 import org.example.publicdatacontest.domain.dto.responseDTO.MenteeResponse;
 import org.example.publicdatacontest.domain.dto.responseDTO.MentorInfoResponse;
 import org.example.publicdatacontest.domain.dto.responseDTO.MentorResponse;
 import org.example.publicdatacontest.domain.mentee.Mentee;
-import org.example.publicdatacontest.domain.mentee.MenteeCategory;
-import org.example.publicdatacontest.domain.mentee.MenteeClass;
 import org.example.publicdatacontest.domain.mentor.Mentor;
-import org.example.publicdatacontest.domain.mentor.MentorBadge;
-import org.example.publicdatacontest.domain.mentor.MentorCategory;
-import org.example.publicdatacontest.domain.mentor.MentorCertificate;
-import org.example.publicdatacontest.domain.mentor.MentorClass;
+import org.example.publicdatacontest.domain.mentor.MentorReport;
 import org.example.publicdatacontest.domain.signinup.LoginRequest;
 import org.example.publicdatacontest.domain.signinup.SignUpRequest;
-import org.example.publicdatacontest.domain.util.Reports;
-import org.example.publicdatacontest.domain.util.Review;
 import org.example.publicdatacontest.jwt.JwtAuthenticationResponse;
 import org.example.publicdatacontest.jwt.JwtTokenProvider;
 import org.example.publicdatacontest.repository.mentee.MenteeRepository;
+import org.example.publicdatacontest.repository.mentor.MentorReportRepository;
 import org.example.publicdatacontest.repository.mentor.MentorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -54,6 +49,12 @@ public class AuthService {
 
 	@Autowired
 	JwtTokenProvider tokenProvider;
+
+	private final MentorReportRepository mentorReportRepository;
+
+	public AuthService(MentorReportRepository mentorReportRepository) {
+		this.mentorReportRepository = mentorReportRepository;
+	}
 
 	public JwtAuthenticationResponse authenticateUser(LoginRequest loginRequest) {
 		Authentication authentication = authenticationManager.authenticate(
@@ -191,5 +192,18 @@ public class AuthService {
 			mentee.setPaymentMethod(payment);
 			menteeRepository.save(mentee);
 		});
+	}
+
+	public void reportUser(UserDetails userDetails, ReportUserRequest reportUserRequest) {
+		if (!userDetails.isAccountNonExpired()) {
+			throw new RuntimeException("User is not active");
+		}
+		Mentor mentor = mentorRepository.findById(reportUserRequest.getReportedUserId())
+			.orElseThrow(() -> new NotFoundException("Mentor not found"));
+		Mentee mentee = menteeRepository.findByUserId(userDetails.getUsername())
+			.orElseThrow(() -> new NotFoundException("Mentee not found"));
+
+		mentorReportRepository.save(
+			new MentorReport(mentor, mentee, reportUserRequest.getReportContent(), LocalDateTime.now()));
 	}
 }

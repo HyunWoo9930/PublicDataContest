@@ -2,6 +2,7 @@ package org.example.publicdatacontest.controller;
 
 import java.util.List;
 
+import org.example.publicdatacontest.domain.dto.requestDTO.ReportUserRequest;
 import org.example.publicdatacontest.domain.dto.responseDTO.MenteeResponse;
 import org.example.publicdatacontest.domain.dto.responseDTO.MentorResponse;
 import org.example.publicdatacontest.domain.signinup.LoginRequest;
@@ -91,6 +92,19 @@ public class AuthController {
 	) {
 		try {
 			authService.registerPay(userDetails, payment);
+			return ResponseEntity.ok("success");
+		} catch (RuntimeException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		}
+	}
+
+	@PostMapping("/report_user")
+	public ResponseEntity<?> reportUser(
+		@AuthenticationPrincipal UserDetails userDetails,
+		@RequestBody ReportUserRequest reportUserRequest
+	) {
+		try {
+			authService.reportUser(userDetails, reportUserRequest);
 			return ResponseEntity.ok("success");
 		} catch (RuntimeException e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
