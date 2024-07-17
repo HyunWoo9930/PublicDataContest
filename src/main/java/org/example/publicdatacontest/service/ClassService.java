@@ -152,4 +152,18 @@ public class ClassService {
 		mentorClass.getMentor().setStudentCount(++studentCount);
 		mentorClassRepository.save(mentorClass);
 	}
+
+	public List<MentorClassResponse> getMentorMentoring(Long mentorId) {
+		List<MentorClass> mentorClasses = mentorClassRepository.findAll().stream()
+			.filter(i -> i.getMentor().getMentorId().equals(mentorId))
+			.toList();
+
+		List<MentorClassResponse> mentorClassResponses = new ArrayList<>();
+
+		mentorClasses.forEach(mentorClass -> {
+			MentorClassResponse mentorClassResponse = new MentorClassResponse(mentorClass);
+			mentorClassResponses.add(mentorClassResponse);
+		});
+		return mentorClassResponses;
+	}
 }

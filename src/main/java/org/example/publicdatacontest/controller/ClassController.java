@@ -101,4 +101,12 @@ public class ClassController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		}
 	}
+
+	@GetMapping("/get_mentor_mentoring")
+	public ResponseEntity<?> getMentorMentoring(
+		@RequestParam(value = "mentor_id") Long mentorId
+	) {
+		List<MentorClassResponse> mentorClasses = classService.getMentorMentoring(mentorId);
+		return ResponseEntity.ok(mentorClasses);
+	}
 }
