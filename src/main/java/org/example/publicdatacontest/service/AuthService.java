@@ -206,4 +206,8 @@ public class AuthService {
 		mentorReportRepository.save(
 			new MentorReport(mentor, mentee, reportUserRequest.getReportContent(), LocalDateTime.now()));
 	}
+
+	public Boolean idDuplicateCheck(String userId) {
+		return mentorRepository.existsByUserId(userId) | menteeRepository.existsByUserId(userId);
+	}
 }
