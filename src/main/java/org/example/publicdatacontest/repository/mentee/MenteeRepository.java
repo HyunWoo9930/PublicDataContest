@@ -9,4 +9,7 @@ public interface MenteeRepository extends JpaRepository<Mentee, Long> {
 	Optional<Mentee> findByUserId(String id);
 
 	boolean existsByUserId(String id);
+
+	boolean existsByEmail(String id);
+
 }

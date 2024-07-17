@@ -121,4 +121,14 @@ public class AuthController {
 		}
 	}
 
+	@GetMapping("/email_duplicate")
+	public ResponseEntity<?> emailDuplicate(
+		@RequestParam(value = "email") String email) {
+		if(!authService.emailDuplicateCheck(email)) {
+			return ResponseEntity.ok("success");
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("duplicate id");
+		}
+	}
+
 }

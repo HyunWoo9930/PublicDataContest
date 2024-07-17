@@ -210,4 +210,8 @@ public class AuthService {
 	public Boolean idDuplicateCheck(String userId) {
 		return mentorRepository.existsByUserId(userId) | menteeRepository.existsByUserId(userId);
 	}
+
+	public Boolean emailDuplicateCheck(String email) {
+		return mentorRepository.existsByEmail(email) | menteeRepository.existsByEmail(email);
+	}
 }
