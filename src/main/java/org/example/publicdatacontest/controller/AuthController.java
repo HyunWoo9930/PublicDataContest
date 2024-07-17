@@ -142,4 +142,16 @@ public class AuthController {
 		}
 	}
 
+	@PutMapping("change_password")
+	public ResponseEntity<?> changePassword(
+		@AuthenticationPrincipal UserDetails userDetails,
+		@RequestParam(value = "new_password") String password
+	) {
+		try {
+			authService.changePassword(userDetails, password);
+			return ResponseEntity.ok("success");
+		} catch (RuntimeException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		}
+	}
 }

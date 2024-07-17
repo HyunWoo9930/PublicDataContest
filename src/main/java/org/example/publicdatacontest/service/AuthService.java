@@ -228,4 +228,15 @@ public class AuthService {
 			}
 		}
 	}
+
+	public void changePassword(UserDetails userDetails, String password) {
+		mentorRepository.findByUserId(userDetails.getUsername()).ifPresent(mentor -> {
+			mentor.setPassword(passwordEncoder.encode(password));
+			mentorRepository.save(mentor);
+		});
+		menteeRepository.findByUserId(userDetails.getUsername()).ifPresent(mentee -> {
+			mentee.setPassword(passwordEncoder.encode(password));
+			menteeRepository.save(mentee);
+		});
+	}
 }
