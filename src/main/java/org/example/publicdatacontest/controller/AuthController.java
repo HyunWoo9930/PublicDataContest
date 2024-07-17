@@ -131,4 +131,15 @@ public class AuthController {
 		}
 	}
 
+	@GetMapping("/find_id")
+	public ResponseEntity<?> findId(
+		@RequestParam(value = "email") String email) {
+		try {
+			String userId = authService.findId(email);
+			return ResponseEntity.ok(userId);
+		} catch (RuntimeException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		}
+	}
+
 }

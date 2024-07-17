@@ -214,4 +214,18 @@ public class AuthService {
 	public Boolean emailDuplicateCheck(String email) {
 		return mentorRepository.existsByEmail(email) | menteeRepository.existsByEmail(email);
 	}
+
+	public String findId(String email) {
+		Optional<Mentor> mentor = mentorRepository.findByEmail(email);
+		if (mentor.isPresent()) {
+			return mentor.get().getUserId();
+		} else {
+			Optional<Mentee> mentee = menteeRepository.findByEmail(email);
+			if (mentee.isPresent()) {
+				return mentee.get().getUserId();
+			} else {
+				throw new NotFoundException("User not found");
+			}
+		}
+	}
 }

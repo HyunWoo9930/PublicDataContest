@@ -12,4 +12,5 @@ public interface MenteeRepository extends JpaRepository<Mentee, Long> {
 
 	boolean existsByEmail(String id);
 
+	Optional<Mentee> findByEmail(String email);
 }
