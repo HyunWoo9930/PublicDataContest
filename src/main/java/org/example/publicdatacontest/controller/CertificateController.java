@@ -21,6 +21,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 
 @RestController
 @RequestMapping("/api/certificates")
+@CrossOrigin(origins = "*")
 public class CertificateController {
 	@Autowired
 	private CertificateService certificateService;
