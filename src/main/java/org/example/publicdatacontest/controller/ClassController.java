@@ -104,9 +104,9 @@ public class ClassController {
 
 	@GetMapping("/get_mentor_mentoring")
 	public ResponseEntity<?> getMentorMentoring(
-		@RequestParam(value = "mentor_id") Long mentorId
+		@AuthenticationPrincipal UserDetails userDetails
 	) {
-		List<MentorClassResponse> mentorClasses = classService.getMentorMentoring(mentorId);
+		List<MentorClassResponse> mentorClasses = classService.getMentorMentoring(userDetails);
 		return ResponseEntity.ok(mentorClasses);
 	}
 }

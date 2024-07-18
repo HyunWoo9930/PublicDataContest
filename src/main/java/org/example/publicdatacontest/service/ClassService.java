@@ -153,9 +153,12 @@ public class ClassService {
 		mentorClassRepository.save(mentorClass);
 	}
 
-	public List<MentorClassResponse> getMentorMentoring(Long mentorId) {
+	public List<MentorClassResponse> getMentorMentoring(UserDetails userDetails) {
+		Mentor mentor = mentorRepository.findByUserId(userDetails.getUsername())
+			.orElseThrow(() -> new RuntimeException("멘토가 아니거나, 유저가 없습니다."));
+
 		List<MentorClass> mentorClasses = mentorClassRepository.findAll().stream()
-			.filter(i -> i.getMentor().getMentorId().equals(mentorId))
+			.filter(i -> i.getMentor().getMentorId().equals(mentor.getMentorId()))
 			.toList();
 
 		List<MentorClassResponse> mentorClassResponses = new ArrayList<>();
