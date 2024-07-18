@@ -198,7 +198,7 @@ public class AuthService {
 		if (!userDetails.isAccountNonExpired()) {
 			throw new RuntimeException("User is not active");
 		}
-		Mentor mentor = mentorRepository.findByUserId(reportUserRequest.getReportedUserId())
+		Mentor mentor = mentorRepository.findById(reportUserRequest.getReportedUserId())
 			.orElseThrow(() -> new NotFoundException("Mentor not found"));
 		Mentee mentee = menteeRepository.findByUserId(userDetails.getUsername())
 			.orElseThrow(() -> new NotFoundException("Mentee not found"));

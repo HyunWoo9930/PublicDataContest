@@ -7,9 +7,9 @@ import lombok.Setter;
 @Setter
 public class ReportUserRequest {
 	private String reportContent;
-	private String reportedUserId;
+	private Long reportedUserId;
 
-	public ReportUserRequest(String reportContent, String reportedUserId) {
+	public ReportUserRequest(String reportContent, Long reportedUserId) {
 		this.reportContent = reportContent;
 		this.reportedUserId = reportedUserId;
 	}
