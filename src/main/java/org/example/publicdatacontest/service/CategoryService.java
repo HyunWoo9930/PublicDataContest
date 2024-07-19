@@ -14,7 +14,6 @@ import org.example.publicdatacontest.domain.mentee.MenteeCategory;
 import org.example.publicdatacontest.domain.mentor.Mentor;
 import org.example.publicdatacontest.domain.mentor.MentorCategory;
 import org.example.publicdatacontest.repository.category.CategoryRepository;
-import org.example.publicdatacontest.repository.category.SubCategoryRepository;
 import org.example.publicdatacontest.repository.mentee.MenteeCategoryRepository;
 import org.example.publicdatacontest.repository.mentee.MenteeRepository;
 import org.example.publicdatacontest.repository.mentor.MentorCategoryRepository;
@@ -39,7 +38,6 @@ public class CategoryService {
     private final MenteeRepository menteeRepository;
 
     private final CategoryRepository categoryRepository;
-    private final SubCategoryRepository subCategoryRepository;
 
     private final SubCategoryService subCategoryService;
 
@@ -107,7 +105,6 @@ public class CategoryService {
         }
 
         return "MenteeCategory saved successfully";
-
     }
 
 

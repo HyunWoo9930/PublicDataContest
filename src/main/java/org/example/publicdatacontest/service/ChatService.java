@@ -140,15 +140,16 @@ public class ChatService {
 			.collect(Collectors.toList());
 
 		List<PaymentStatusHistoryResponse> paymentStatusHistoryResponses = conversation.getPaymentStatusHistories()
-			.stream()
-			.map(paymentStatusHistory -> new PaymentStatusHistoryResponse(
-				paymentStatusHistory.getId(),
-				conversation.getConversationId(),
-				paymentStatusHistory.getPaymentStatus(),
-				paymentStatusHistory.getTimestamp(),
-				paymentStatusHistory.getSender()
-			))
-			.toList();
+				.stream()
+				.map(paymentStatusHistory -> new PaymentStatusHistoryResponse(
+						paymentStatusHistory.getId(),
+						conversation.getConversationId(),
+						paymentStatusHistory.getPaymentStatus(),
+						paymentStatusHistory.getTimestamp(),
+						paymentStatusHistory.getSender(),
+						paymentStatusHistory.getReviewCheck()
+				))
+				.toList();
 
 		return new ChatDetailResponse(chatResponses, paymentStatusHistoryResponses);
 	}
@@ -161,19 +162,20 @@ public class ChatService {
 		if (conversationUpdatePaymentStatusRequest.getPaymentStatus() == PaymentStatus.PAYMENT_COMPLETED) {
 			conversation.addPaymentStatusHistory(
 				new PaymentStatusHistory(conversation, conversationUpdatePaymentStatusRequest.getPaymentStatus(),
-					LocalDateTime.now(), "mentee"));
+					LocalDateTime.now(), "mentee", false));
 		} else if (conversationUpdatePaymentStatusRequest.getPaymentStatus() == PaymentStatus.PAYMENT_REQUESTED) {
 			conversation.addPaymentStatusHistory(
 				new PaymentStatusHistory(conversation, conversationUpdatePaymentStatusRequest.getPaymentStatus(),
-					LocalDateTime.now(), "mentor"));
+					LocalDateTime.now(), "mentor", false));
 		} else if (conversationUpdatePaymentStatusRequest.getPaymentStatus() == PaymentStatus.DAILY_MENTORING_STARTED
-			|| conversationUpdatePaymentStatusRequest.getPaymentStatus() == PaymentStatus.DAILY_MENTORING_ENDED
-			|| conversationUpdatePaymentStatusRequest.getPaymentStatus() == PaymentStatus.FINAL_MENTORING_ENDED) {
+			|| conversationUpdatePaymentStatusRequest.getPaymentStatus() == PaymentStatus.DAILY_MENTORING_ENDED) {
 			conversation.addPaymentStatusHistory(
 				new PaymentStatusHistory(conversation, conversationUpdatePaymentStatusRequest.getPaymentStatus(),
-					LocalDateTime.now(), "mentor"));
-		} else {
-
+					LocalDateTime.now(), "mentor", false));
+		} else if (conversationUpdatePaymentStatusRequest.getPaymentStatus() == PaymentStatus.FINAL_MENTORING_ENDED) {
+			conversation.addPaymentStatusHistory(
+					new PaymentStatusHistory(conversation, conversationUpdatePaymentStatusRequest.getPaymentStatus(),
+							LocalDateTime.now(), "mentor", true));
 		}
 
 		conversationRepository.save(conversation);

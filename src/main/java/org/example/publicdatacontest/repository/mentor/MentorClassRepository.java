@@ -3,6 +3,8 @@ package org.example.publicdatacontest.repository.mentor;
 import org.example.publicdatacontest.domain.mentor.MentorClass;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface MentorClassRepository extends JpaRepository<MentorClass, Long> {
+import java.util.Optional;
 
+public interface MentorClassRepository extends JpaRepository<MentorClass, Long> {
+    Optional<MentorClass> findByClassId(Long Id);
 }
