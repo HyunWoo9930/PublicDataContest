@@ -15,14 +15,15 @@ public class PaymentStatusHistoryResponse {
 	private PaymentStatus paymentStatus;
 	private LocalDateTime timestamp;
 	private String sender;
+	private Boolean reviewCheck;
 
 	public PaymentStatusHistoryResponse(Long id, Long conversationId, PaymentStatus paymentStatus,
-		LocalDateTime timestamp,
-		String sender) {
+		LocalDateTime timestamp, String sender, Boolean reviewCheck) {
 		this.id = id;
 		this.conversationId = conversationId;
 		this.paymentStatus = paymentStatus;
 		this.timestamp = timestamp;
 		this.sender = sender;
+		this.reviewCheck = reviewCheck;
 	}
 }

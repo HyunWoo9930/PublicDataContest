@@ -83,6 +83,11 @@ public class Mentee {
 		menteeCategory.setMentee(this);
 	}
 
+	public void addReview(Review review) {
+		this.reviews.add(review);
+		review.setMentee(this);
+	}
+
 	public Mentee(Long menteeId, String userId, String password, String menteeName, String gender, LocalDate birth,
 		String email, String phoneNumber, String address, Boolean employmentIdea, Boolean active,
 		Boolean isEmailAlarmAgreed, String paymentMethod, LocalDateTime createdAt, Set<Reports> reports,

@@ -22,14 +22,16 @@ public class PaymentStatusHistory {
 	private PaymentStatus paymentStatus;
 	private LocalDateTime timestamp;
 	private String sender;
+	private Boolean reviewCheck;
 
 	public PaymentStatusHistory() {
 	}
 
-	public PaymentStatusHistory(Conversation conversation, PaymentStatus paymentStatus, LocalDateTime timestamp, String sender) {
+	public PaymentStatusHistory(Conversation conversation, PaymentStatus paymentStatus, LocalDateTime timestamp, String sender, Boolean reviewCheck) {
 		this.conversation = conversation;
 		this.paymentStatus = paymentStatus;
 		this.timestamp = timestamp;
 		this.sender = sender;
+		this.reviewCheck = reviewCheck;
 	}
 }

@@ -49,4 +49,10 @@ public class MentorClass {
 	@CreatedDate
 	@Column(updatable = false)
 	private LocalDateTime createdAt;
+
+
+	public void addReview(Review review) {
+		this.reviews.add(review);
+		review.setMentorClass(this);
+	}
 }
