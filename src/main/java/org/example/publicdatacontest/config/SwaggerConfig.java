@@ -25,15 +25,19 @@ public class SwaggerConfig {
 				.name("HyunWoo9930")
 				.email("hw62459930@gmail.com"));
 
-		Server server = new Server();
-		server.setUrl("https://hyunwoo9930.shop");
+		// Server server = new Server();
+		// server.setUrl("https://hyunwoo9930.shop");
 
 		Server server2 = new Server();
 		server2.setUrl("http://localhost:8080/");
 
+		Server server3 = new Server();
+		server2.setUrl("http://54.180.217.161:8080/");
+
 		List<Server> serverList = new ArrayList<>();
-		serverList.add(server);
+		// serverList.add(server);
 		serverList.add(server2);
+		serverList.add(server3);
 
 		return new OpenAPI()
 			.info(info)
