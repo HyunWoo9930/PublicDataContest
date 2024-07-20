@@ -70,4 +70,29 @@ public class CategoryController {
         return ResponseEntity.ok(allCategoryList);
     }
 
+    @PostMapping("add_category")
+    public ResponseEntity<?> addCategory(
+        @RequestParam(value = "category") String[] category
+    ) {
+        try {
+            categoryService.addCategory(category);
+            return ResponseEntity.ok("success");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("add_subcategory")
+    public ResponseEntity<?> addSubCategory(
+        @RequestParam(value = "category_id") Long category_id,
+        @RequestParam(value = "subcategory") String[] subcategory
+    ) {
+        try {
+            categoryService.addSubCategory(category_id, subcategory);
+            return ResponseEntity.ok("success");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
 }

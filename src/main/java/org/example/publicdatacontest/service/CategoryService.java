@@ -4,6 +4,8 @@ package org.example.publicdatacontest.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.example.publicdatacontest.domain.category.Category;
 import org.example.publicdatacontest.domain.category.SubCategory;
 import org.example.publicdatacontest.domain.dto.requestDTO.SubCategorySaveRequest;
 import org.example.publicdatacontest.domain.dto.responseDTO.CategoryResponse;
@@ -14,6 +16,7 @@ import org.example.publicdatacontest.domain.mentee.MenteeCategory;
 import org.example.publicdatacontest.domain.mentor.Mentor;
 import org.example.publicdatacontest.domain.mentor.MentorCategory;
 import org.example.publicdatacontest.repository.category.CategoryRepository;
+import org.example.publicdatacontest.repository.category.SubCategoryRepository;
 import org.example.publicdatacontest.repository.mentee.MenteeCategoryRepository;
 import org.example.publicdatacontest.repository.mentee.MenteeRepository;
 import org.example.publicdatacontest.repository.mentor.MentorCategoryRepository;
@@ -40,6 +43,7 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
 
     private final SubCategoryService subCategoryService;
+    private final SubCategoryRepository subCategoryRepository;
 
 
     public String saveMentorSubCategory(SubCategorySaveRequest saveRequest, UserDetails userDetails) {
@@ -128,5 +132,22 @@ public class CategoryService {
                 .toList();
     }
 
+    public void addCategory(String[] subcategory) {
+        for (String name : subcategory) {
+            Category category = new Category();
+            category.setName(name);
+            categoryRepository.save(category);
+        }
+    }
+
+    public void addSubCategory(Long category_id, String[] subcategory) {
+        Category category = categoryRepository.findById(category_id).get();
+        for(String name : subcategory) {
+            SubCategory subCategory = new SubCategory();
+            subCategory.setName(name);
+            subCategory.setCategory(category);
+            subCategoryRepository.save(subCategory);
+        }
+    }
 }
 
