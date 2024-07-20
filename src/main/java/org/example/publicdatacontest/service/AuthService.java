@@ -1,6 +1,9 @@
 package org.example.publicdatacontest.service;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -21,6 +24,8 @@ import org.example.publicdatacontest.repository.mentee.MenteeRepository;
 import org.example.publicdatacontest.repository.mentor.MentorReportRepository;
 import org.example.publicdatacontest.repository.mentor.MentorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -28,6 +33,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.webjars.NotFoundException;
 
 import jakarta.transaction.Transactional;
@@ -51,6 +57,14 @@ public class AuthService {
 	JwtTokenProvider tokenProvider;
 
 	private final MentorReportRepository mentorReportRepository;
+
+	private static final List<String> ALLOWED_CONTENT_TYPES = Arrays.asList(
+		"image/png",
+		"image/jpeg",
+		"image/jpg"
+	);
+
+	private static final long MAX_FILE_SIZE = 5 * 1024 * 1024;
 
 	public AuthService(MentorReportRepository mentorReportRepository) {
 		this.mentorReportRepository = mentorReportRepository;
@@ -239,4 +253,62 @@ public class AuthService {
 			menteeRepository.save(mentee);
 		});
 	}
+
+	public void uploadProfileImage(UserDetails userDetails, MultipartFile profileImage) {
+		if (!ALLOWED_CONTENT_TYPES.contains(profileImage.getContentType())) {
+			throw new IllegalArgumentException("Only PNG, JPEG, and JPG files are allowed");
+		}
+
+		if (profileImage.getSize() > MAX_FILE_SIZE) {
+			throw new IllegalArgumentException("File size must be less than 5MB");
+		}
+
+		mentorRepository.findByUserId(userDetails.getUsername()).ifPresent(mentor -> {
+			try {
+				mentor.setProfilePicture(profileImage.getBytes());
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+			mentorRepository.save(mentor);
+		});
+		menteeRepository.findByUserId(userDetails.getUsername()).ifPresent(mentee -> {
+			try {
+				mentee.setProfilePicture(profileImage.getBytes());
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+			menteeRepository.save(mentee);
+		});
+	}
+
+	public byte[] getProfileImage(UserDetails userDetails) {
+		Optional<Mentor> mentor = mentorRepository.findByUserId(userDetails.getUsername());
+		if (mentor.isPresent() && mentor.get().getProfilePicture() != null) {
+			return mentor.get().getProfilePicture();
+		}
+
+		Optional<Mentee> mentee = menteeRepository.findByUserId(userDetails.getUsername());
+		if (mentee.isPresent() && mentee.get().getProfilePicture() != null) {
+			return mentee.get().getProfilePicture();
+		}
+
+		throw new IllegalArgumentException("Profile picture not found for user: " + userDetails.getUsername());
+	}
+
+	// public Resource loadProfileImage(String user_name) throws MalformedURLException {
+	// 	Optional<User> user = userRepository.findByUsername(user_name);
+	// 	if (user.isPresent()) {
+	// 		Path filePath = Paths.get(user.get().getProfileUrl());
+	// 		System.out.println("filePath = " + filePath);
+	// 		Resource resource = new UrlResource(filePath.toUri());
+	// 		System.out.println("resource = " + resource);
+	// 		if (resource.exists() && resource.isReadable()) {
+	// 			return resource;
+	// 		} else {
+	// 			throw new RuntimeException("Could not read file: " + filePath);
+	// 		}
+	// 	} else {
+	// 		throw new RuntimeException("User not found with id: " + user_name);
+	// 	}
+	// }
 }

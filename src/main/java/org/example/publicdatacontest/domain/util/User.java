@@ -52,7 +52,7 @@ public abstract class User {
 	@Pattern(regexp = "^[0-9]{10,15}$", message = "Phone number should be between 10 and 15 digits")
 	private String phoneNumber;
 	private String address;
-	private Boolean active;
+	private Boolean active = true;
 	private Boolean isEmailAlarmAgreed;
 	private String paymentMethod;
 
@@ -60,5 +60,6 @@ public abstract class User {
 	@Column(updatable = false)
 	private LocalDateTime createdAt;
 
+	@Column(columnDefinition = "mediumblob")
 	private byte[] profilePicture;
 }

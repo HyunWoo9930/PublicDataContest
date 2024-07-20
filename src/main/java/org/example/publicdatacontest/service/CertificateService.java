@@ -28,7 +28,7 @@ public class CertificateService {
 		"image/jpg"
 	);
 
-	private static final long MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+	private static final long MAX_FILE_SIZE = 5 * 1024 * 1024;
 
 	public Certificate saveCertificate(UserDetails userDetails, MultipartFile file) throws IOException {
 		if (!ALLOWED_CONTENT_TYPES.contains(file.getContentType())) {

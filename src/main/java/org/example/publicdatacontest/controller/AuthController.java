@@ -9,7 +9,9 @@ import org.example.publicdatacontest.domain.signinup.LoginRequest;
 import org.example.publicdatacontest.domain.signinup.SignUpRequest;
 import org.example.publicdatacontest.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,8 +24,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.webjars.NotFoundException;
 
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 
 @RestController
@@ -114,7 +118,7 @@ public class AuthController {
 	@GetMapping("/id_duplicate")
 	public ResponseEntity<?> idDuplicate(
 		@RequestParam(value = "userId") String userId) {
-		if(!authService.idDuplicateCheck(userId)) {
+		if (!authService.idDuplicateCheck(userId)) {
 			return ResponseEntity.ok("success");
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("duplicate id");
@@ -124,7 +128,7 @@ public class AuthController {
 	@GetMapping("/email_duplicate")
 	public ResponseEntity<?> emailDuplicate(
 		@RequestParam(value = "email") String email) {
-		if(!authService.emailDuplicateCheck(email)) {
+		if (!authService.emailDuplicateCheck(email)) {
 			return ResponseEntity.ok("success");
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("duplicate id");
@@ -154,4 +158,34 @@ public class AuthController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		}
 	}
+
+	@PutMapping(value = "/upload_profile_image", consumes = "multipart/form-data")
+	public ResponseEntity<?> uploadProfileImage(
+		@AuthenticationPrincipal UserDetails userDetails,
+		@Parameter(name = "file", description = "업로드 사진 데이터")
+		@RequestParam(value = "file") MultipartFile file
+	) {
+		try {
+			authService.uploadProfileImage(userDetails, file);
+			return ResponseEntity.ok("success");
+		} catch (RuntimeException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		}
+	}
+
+	@GetMapping("/get_profile_image")
+	public ResponseEntity<?> getProfileImage(
+		@AuthenticationPrincipal UserDetails userDetails
+	) {
+		try {
+			byte[] image = authService.getProfileImage(userDetails);
+			return ResponseEntity.ok()
+				.header(HttpHeaders.CONTENT_DISPOSITION,
+					"attachment; filename=\"" + userDetails.getUsername() + ".jpg\"")
+				.body(image);
+		} catch (RuntimeException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		}
+	}
+
 }
