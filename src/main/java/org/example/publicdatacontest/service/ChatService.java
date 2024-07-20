@@ -97,7 +97,7 @@ public class ChatService {
 		}
 		if (mentorRepository.findByUserId(userDetails.getUsername()).isPresent()) {
 			Long mentorId = mentorRepository.findByUserId(userDetails.getUsername()).get().getId();
-			List<Conversation> conversations = conversationRepository.findAllByMenteeId(mentorId);
+			List<Conversation> conversations = conversationRepository.findAllByMentorId(mentorId);
 			return getConversationResponses(conversations);
 		} else if (menteeRepository.findByUserId(userDetails.getUsername()).isPresent()) {
 			Long menteeId = menteeRepository.findByUserId(userDetails.getUsername()).get().getId();
