@@ -12,6 +12,7 @@ import org.example.publicdatacontest.domain.util.Review;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Base64;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -32,6 +33,7 @@ public class MenteeResponse {
 	private Boolean active;
 	private Boolean isEmailAlarmAgreed;
 	private String payment;
+	private String image;
 	private LocalDateTime createdAt;
 	private Set<Long> reportIds;
 	private Set<Long> conversationIds;
@@ -53,6 +55,7 @@ public class MenteeResponse {
 		this.active = mentee.getActive();
 		this.isEmailAlarmAgreed = mentee.getIsEmailAlarmAgreed();
 		this.payment = mentee.getPaymentMethod();
+		this.image = Base64.getEncoder().encodeToString(mentee.getProfilePicture());
 		this.createdAt = mentee.getCreatedAt();
 		this.reportIds = mentee.getReports().stream().map(Reports::getReportId).collect(Collectors.toSet());
 		this.conversationIds = mentee.getConversations().stream().map(Conversation::getConversationId).collect(Collectors.toSet());

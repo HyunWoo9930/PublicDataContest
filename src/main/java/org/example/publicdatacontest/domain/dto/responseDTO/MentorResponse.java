@@ -11,6 +11,7 @@ import org.example.publicdatacontest.domain.util.Reports;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Base64;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -32,6 +33,7 @@ public class MentorResponse {
 	private Boolean active;
 	private Boolean isEmailAlarmAgreed;
 	private String payment;
+	private String image;
 	private LocalDateTime createdAt;
 	private Set<Long> certificateIds;
 	private Set<Long> badgeIds;
@@ -56,6 +58,7 @@ public class MentorResponse {
 		this.active = mentor.getActive();
 		this.isEmailAlarmAgreed = mentor.getIsEmailAlarmAgreed();
 		this.payment = mentor.getPaymentMethod();
+		this.image = Base64.getEncoder().encodeToString(mentor.getProfilePicture());
 		this.createdAt = mentor.getCreatedAt();
 		this.certificateIds = mentor.getCertificates().stream().map(MentorCertificate::getCertificateId).collect(Collectors.toSet());
 		this.badgeIds = mentor.getBadges().stream().map(MentorBadge::getBadgeId).collect(Collectors.toSet());

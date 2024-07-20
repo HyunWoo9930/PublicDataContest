@@ -306,4 +306,20 @@ public class AuthService {
 			menteeRepository.save(mentee);
 		});
 	}
+
+
+
+	public byte[] getProfileImageId(Long id) {
+		Optional<Mentor> mentor = mentorRepository.findById(id);
+		if (mentor.isPresent() && mentor.get().getProfilePicture() != null) {
+			return mentor.get().getProfilePicture();
+		}
+
+		Optional<Mentee> mentee = menteeRepository.findById(id);
+		if (mentee.isPresent() && mentee.get().getProfilePicture() != null) {
+			return mentee.get().getProfilePicture();
+		}
+
+		throw new IllegalArgumentException("Profile picture not found for user: " + id);
+	}
 }

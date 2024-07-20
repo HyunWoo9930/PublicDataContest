@@ -201,4 +201,18 @@ public class AuthController {
 		}
 	}
 
+	@GetMapping("get_profile_by_id")
+	public ResponseEntity<?> getProfileById(
+		@RequestParam(value = "user_id") Long user_id
+	) {
+		try {
+			byte[] image = authService.getProfileImageId(user_id);
+			return ResponseEntity.ok()
+				.header(HttpHeaders.CONTENT_DISPOSITION,
+					"attachment; filename=\"" + user_id + ".jpg\"")
+				.body(image);
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		}
+	}
 }
