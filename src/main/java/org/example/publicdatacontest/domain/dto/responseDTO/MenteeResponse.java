@@ -55,7 +55,7 @@ public class MenteeResponse {
 		this.active = mentee.getActive();
 		this.isEmailAlarmAgreed = mentee.getIsEmailAlarmAgreed();
 		this.payment = mentee.getPaymentMethod();
-		this.image = Base64.getEncoder().encodeToString(mentee.getProfilePicture());
+		this.image = mentee.getProfilePicture() != null ? Base64.getEncoder().encodeToString(mentee.getProfilePicture()) : null;
 		this.createdAt = mentee.getCreatedAt();
 		this.reportIds = mentee.getReports().stream().map(Reports::getReportId).collect(Collectors.toSet());
 		this.conversationIds = mentee.getConversations().stream().map(Conversation::getConversationId).collect(Collectors.toSet());

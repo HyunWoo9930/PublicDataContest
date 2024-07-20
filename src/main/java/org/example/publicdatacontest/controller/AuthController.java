@@ -68,10 +68,20 @@ public class AuthController {
 		}
 	}
 
-	@GetMapping("/getInfo")
-	public ResponseEntity<?> getInfo(@AuthenticationPrincipal UserDetails userDetails) {
+	@GetMapping("/getMyInfo")
+	public ResponseEntity<?> getMyInfo(@AuthenticationPrincipal UserDetails userDetails) {
 		try {
 			Object info = authService.getInfo(userDetails);
+			return ResponseEntity.ok(info);
+		} catch (NotFoundException | UsernameNotFoundException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}
+	}
+
+	@GetMapping("/getInfo")
+	public ResponseEntity<?> getInfo(@RequestParam(value = "user_id") Long user_id) {
+		try {
+			Object info = authService.getMyInfo(user_id);
 			return ResponseEntity.ok(info);
 		} catch (NotFoundException | UsernameNotFoundException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

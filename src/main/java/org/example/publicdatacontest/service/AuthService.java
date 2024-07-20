@@ -168,6 +168,20 @@ public class AuthService {
 		}
 	}
 
+	public Object getMyInfo(Long user_id) {
+		Optional<Mentor> mentor = mentorRepository.findById(user_id);
+		if (mentor.isPresent()) {
+			return new MentorInfoResponse(convertToDTO(mentor.get()), "mentor");
+		} else {
+			Optional<Mentee> mentee = menteeRepository.findById(user_id);
+			if (mentee.isPresent()) {
+				return new MenteeInfoResponse(convertToDTO(mentee.get()), "mentee");
+			} else {
+				throw new NotFoundException("user not found");
+			}
+		}
+	}
+
 	public List<MentorResponse> getAllMentorInfo() {
 		return mentorRepository.findAll().stream()
 			.map(this::convertToDTO)
