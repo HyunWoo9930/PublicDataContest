@@ -30,6 +30,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -295,20 +296,14 @@ public class AuthService {
 		throw new IllegalArgumentException("Profile picture not found for user: " + userDetails.getUsername());
 	}
 
-	// public Resource loadProfileImage(String user_name) throws MalformedURLException {
-	// 	Optional<User> user = userRepository.findByUsername(user_name);
-	// 	if (user.isPresent()) {
-	// 		Path filePath = Paths.get(user.get().getProfileUrl());
-	// 		System.out.println("filePath = " + filePath);
-	// 		Resource resource = new UrlResource(filePath.toUri());
-	// 		System.out.println("resource = " + resource);
-	// 		if (resource.exists() && resource.isReadable()) {
-	// 			return resource;
-	// 		} else {
-	// 			throw new RuntimeException("Could not read file: " + filePath);
-	// 		}
-	// 	} else {
-	// 		throw new RuntimeException("User not found with id: " + user_name);
-	// 	}
-	// }
+	public void deleteProfileImage(UserDetails userDetails) {
+		mentorRepository.findByUserId(userDetails.getUsername()).ifPresent(mentor -> {
+			mentor.setProfilePicture(null);
+			mentorRepository.save(mentor);
+		});
+		menteeRepository.findByUserId(userDetails.getUsername()).ifPresent(mentee -> {
+			mentee.setProfilePicture(null);
+			menteeRepository.save(mentee);
+		});
+	}
 }

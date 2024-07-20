@@ -17,6 +17,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -183,6 +184,18 @@ public class AuthController {
 				.header(HttpHeaders.CONTENT_DISPOSITION,
 					"attachment; filename=\"" + userDetails.getUsername() + ".jpg\"")
 				.body(image);
+		} catch (RuntimeException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		}
+	}
+
+	@DeleteMapping("/delete_profile_image")
+	public ResponseEntity<?> deleteProfileImage(
+		@AuthenticationPrincipal UserDetails userDetails
+	) {
+		try {
+			authService.deleteProfileImage(userDetails);
+			return ResponseEntity.ok("success");
 		} catch (RuntimeException e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		}
