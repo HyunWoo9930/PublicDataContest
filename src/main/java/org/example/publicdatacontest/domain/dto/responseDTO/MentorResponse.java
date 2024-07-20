@@ -42,9 +42,9 @@ public class MentorResponse {
 	private List<MentorCategoryResponse> mentorCategoryNames;
 
 	public MentorResponse(Mentor mentor) {
-		this.mentorId = mentor.getMentorId();
+		this.mentorId = mentor.getId();
 		this.userId = mentor.getUserId();
-		this.mentorName = mentor.getMentorName();
+		this.mentorName = mentor.getName();
 		this.gender = mentor.getGender();
 		this.birth = mentor.getBirth();
 		this.email = mentor.getEmail();

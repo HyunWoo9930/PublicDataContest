@@ -62,7 +62,7 @@ public class CategoryService {
         }
 
         for (SubCategory sc : existingSubCategorySet) {
-            mentorCategoryRepository.save(MentorCategory.of(mentor.getMentorId(), sc.getSubCategoryId(), mentor, sc));
+            mentorCategoryRepository.save(MentorCategory.of(mentor.getId(), sc.getSubCategoryId(), mentor, sc));
         }
 
         return "MentorCategory saved successfully";
@@ -101,7 +101,7 @@ public class CategoryService {
         }
 
         for (SubCategory sc : existingSubCategorySet) {
-            menteeCategoryRepository.save(MenteeCategory.of(mentee.getMenteeId(), sc.getSubCategoryId(), mentee, sc));
+            menteeCategoryRepository.save(MenteeCategory.of(mentee.getId(), sc.getSubCategoryId(), mentee, sc));
         }
 
         return "MenteeCategory saved successfully";

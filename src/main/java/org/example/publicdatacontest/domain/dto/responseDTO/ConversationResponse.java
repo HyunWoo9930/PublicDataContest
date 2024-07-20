@@ -16,8 +16,8 @@ public class ConversationResponse {
 
 	public ConversationResponse(Conversation conversation) {
 		this.conversationId = conversation.getConversationId();
-		this.mentorName = conversation.getMentor().getMentorName();
-		this.menteeName = conversation.getMentee().getMenteeName();
+		this.mentorName = conversation.getMentor().getName();
+		this.menteeName = conversation.getMentee().getName();
 		this.startDate = conversation.getStartDate();
 	}
 }

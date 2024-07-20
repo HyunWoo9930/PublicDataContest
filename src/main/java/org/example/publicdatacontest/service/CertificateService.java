@@ -54,13 +54,13 @@ public class CertificateService {
 		Mentor mentor = mentorRepository.findById(id)
 			.orElseThrow(() -> new NotFoundException("Mentor not found"));
 
-		return certificateRepository.findAllByMentor_MentorId(mentor.getMentorId())
+		return certificateRepository.findAllByMentorId(mentor.getId())
 			.stream()
 			.map(certificate -> new CertificateResponse(
 				certificate.getId(),
 				certificate.getImage(),
 				certificate.getUploadTime(),
-				certificate.getMentor().getMentorId()
+				certificate.getMentor().getId()
 			))
 			.toList();
 	}

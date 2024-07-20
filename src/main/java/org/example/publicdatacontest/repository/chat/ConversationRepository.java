@@ -7,9 +7,9 @@ import org.example.publicdatacontest.domain.chat.Conversation;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ConversationRepository extends JpaRepository<Conversation, Long> {
-	List<Conversation> findAllByMentorMentorId(Long mentorId);
+	List<Conversation> findAllByMentorId(Long mentorId);
 
-	List<Conversation> findAllByMenteeMenteeId(Long menteeId);
+	List<Conversation> findAllByMenteeId(Long menteeId);
 
-	Optional<Conversation> findByMenteeMenteeIdAndMentorMentorId(Long menteeId, Long mentorId);
+	Optional<Conversation> findByMenteeIdAndMentorId(Long menteeId, Long mentorId);
 }

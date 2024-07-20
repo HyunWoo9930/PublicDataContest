@@ -6,9 +6,9 @@ import org.example.publicdatacontest.domain.mentor.Mentor;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MentorRepository extends JpaRepository<Mentor, Long> {
-	Optional<Mentor> findByUserId(String id);
+	Optional<Mentor> findByUserId(String userid);
 
-	boolean existsByUserId(String id);
+	boolean existsByUserId(String userid);
 
 	boolean existsByEmail(String email);
 

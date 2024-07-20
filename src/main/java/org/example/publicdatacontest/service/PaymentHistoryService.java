@@ -48,7 +48,7 @@ public class PaymentHistoryService {
 		MentorClass mentorClass = mentorClassRepository.findById(paymentRequest.getClassId())
 			.orElseThrow(() -> new NotFoundException("class not found"));
 
-		MenteeClassId menteeClassId = new MenteeClassId(mentorClass.getClassId(), mentee.getMenteeId());
+		MenteeClassId menteeClassId = new MenteeClassId(mentorClass.getClassId(), mentee.getId());
 
 		Optional<MenteeClass> menteeClassOptional = menteeClassRepository.findById(menteeClassId);
 
@@ -58,7 +58,7 @@ public class PaymentHistoryService {
 		}).orElseGet(() -> {
 			MenteeClass newMenteeClass = new MenteeClass();
 			newMenteeClass.setClassId(mentorClass.getClassId());
-			newMenteeClass.setMenteeId(mentee.getMenteeId());
+			newMenteeClass.setMenteeId(mentee.getId());
 			newMenteeClass.setMentorClass(mentorClass);
 			newMenteeClass.setMentee(mentee);
 			newMenteeClass.setCount(paymentRequest.getCount());
@@ -92,11 +92,11 @@ public class PaymentHistoryService {
 			.orElseThrow(() -> new NotFoundException("user not found"));
 
 		return paymentHistoryRepository.findAllByMenteeClass_MenteeId(
-			mentee.getMenteeId()).stream().map(paymentHistory -> {
+			mentee.getId()).stream().map(paymentHistory -> {
 			MentorClass mentorClass = paymentHistory.getMenteeClass().getMentorClass();
 			return new PaymentResponse(
 				mentorClass.getName(),
-				mentorClass.getMentor().getMentorName(),
+				mentorClass.getMentor().getName(),
 				paymentHistory.getPrice(),
 				paymentHistory.getAmount(),
 				paymentHistory.getMenteeClass().getUsedCount(),

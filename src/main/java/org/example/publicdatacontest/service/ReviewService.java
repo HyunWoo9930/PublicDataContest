@@ -44,7 +44,7 @@ public class ReviewService {
         MentorClass mentorClass = mentorClassRepository.findByClassId(request.getClassId())
                 .orElseThrow(() -> new NotFoundException("class not found"));
 
-        MenteeClassId menteeClassId = new MenteeClassId(request.getClassId(), mentee.getMenteeId());
+        MenteeClassId menteeClassId = new MenteeClassId(request.getClassId(), mentee.getId());
 
         Optional<MenteeClass> menteeClassOptional = menteeClassRepository.findById(menteeClassId);
 

@@ -55,18 +55,18 @@ public class ChatService {
 
 		if (mentorRepository.findByUserId(userDetails.getUsername()).isPresent()) {
 			senderType = "mentor";
-			senderId = conversation.getMentor().getMentorId();
-			senderName = conversation.getMentor().getMentorName();
-			receiverId = conversation.getMentee().getMenteeId();
+			senderId = conversation.getMentor().getId();
+			senderName = conversation.getMentor().getName();
+			receiverId = conversation.getMentee().getId();
 			receiverType = "mentee";
-			receiverName = conversation.getMentee().getMenteeName();
+			receiverName = conversation.getMentee().getName();
 		} else if (menteeRepository.findByUserId(userDetails.getUsername()).isPresent()) {
 			senderType = "mentee";
-			senderId = conversation.getMentee().getMenteeId();
-			senderName = conversation.getMentee().getMenteeName();
-			receiverId = conversation.getMentor().getMentorId();
+			senderId = conversation.getMentee().getId();
+			senderName = conversation.getMentee().getName();
+			receiverId = conversation.getMentor().getId();
 			receiverType = "mentor";
-			receiverName = conversation.getMentor().getMentorName();
+			receiverName = conversation.getMentor().getName();
 		} else {
 			throw new NotFoundException("User Not Found");
 		}
@@ -96,12 +96,12 @@ public class ChatService {
 			throw new RuntimeException("계정이 만료되었습니다.");
 		}
 		if (mentorRepository.findByUserId(userDetails.getUsername()).isPresent()) {
-			Long mentorId = mentorRepository.findByUserId(userDetails.getUsername()).get().getMentorId();
-			List<Conversation> conversations = conversationRepository.findAllByMentorMentorId(mentorId);
+			Long mentorId = mentorRepository.findByUserId(userDetails.getUsername()).get().getId();
+			List<Conversation> conversations = conversationRepository.findAllByMenteeId(mentorId);
 			return getConversationResponses(conversations);
 		} else if (menteeRepository.findByUserId(userDetails.getUsername()).isPresent()) {
-			Long menteeId = menteeRepository.findByUserId(userDetails.getUsername()).get().getMenteeId();
-			List<Conversation> conversations = conversationRepository.findAllByMenteeMenteeId(menteeId);
+			Long menteeId = menteeRepository.findByUserId(userDetails.getUsername()).get().getId();
+			List<Conversation> conversations = conversationRepository.findAllByMenteeId(menteeId);
 			return getConversationResponses(conversations);
 		} else {
 			throw new NotFoundException("User Not Found");
@@ -123,14 +123,14 @@ public class ChatService {
 
 		if (mentorRepository.findByUserId(userDetails.getUsername()).isPresent()) {
 			if (!conversation.getMentor()
-				.getMentorId()
-				.equals(mentorRepository.findByUserId(userDetails.getUsername()).get().getMentorId())) {
+				.getId()
+				.equals(mentorRepository.findByUserId(userDetails.getUsername()).get().getId())) {
 				throw new RuntimeException("권한이 없습니다.");
 			}
 		} else if (menteeRepository.findByUserId(userDetails.getUsername()).isPresent()) {
 			if (!conversation.getMentee()
-				.getMenteeId()
-				.equals(menteeRepository.findByUserId(userDetails.getUsername()).get().getMenteeId())) {
+				.getId()
+				.equals(menteeRepository.findByUserId(userDetails.getUsername()).get().getId())) {
 				throw new RuntimeException("권한이 없습니다.");
 			}
 		}

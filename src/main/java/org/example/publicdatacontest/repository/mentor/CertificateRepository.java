@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CertificateRepository extends JpaRepository<Certificate, Long> {
-	List<Certificate> findAllByMentor_MentorId(Long id);
+	List<Certificate> findAllByMentorId(Long id);
 }

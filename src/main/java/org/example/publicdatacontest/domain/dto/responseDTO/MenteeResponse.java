@@ -41,9 +41,9 @@ public class MenteeResponse {
 	private List<MenteeCategoryResponse> menteeCategoryNames;
 
 	public MenteeResponse(Mentee mentee) {
-		this.menteeId = mentee.getMenteeId();
+		this.menteeId = mentee.getId();
 		this.userId = mentee.getUserId();
-		this.menteeName = mentee.getMenteeName();
+		this.menteeName = mentee.getName();
 		this.gender = mentee.getGender();
 		this.birth = mentee.getBirth();
 		this.email = mentee.getEmail();

@@ -129,7 +129,7 @@ public class ClassService {
 
 		MentorClass mentorClass = mentorClassRepository.findById(classId).orElseThrow(
 			() -> new RuntimeException("해당 클래스가 존재하지 않습니다."));
-		MenteeClassId menteeClassId = new MenteeClassId(mentorClass.getClassId(), mentee.getMenteeId());
+		MenteeClassId menteeClassId = new MenteeClassId(mentorClass.getClassId(), mentee.getId());
 		Optional<MenteeClass> menteeClass = menteeClassRepository.findById(menteeClassId);
 		if (menteeClass.isEmpty()) {
 			throw new RuntimeException("해당 클래스가 존재하지 않습니다.");
@@ -158,7 +158,7 @@ public class ClassService {
 			.orElseThrow(() -> new RuntimeException("멘토가 아니거나, 유저가 없습니다."));
 
 		List<MentorClass> mentorClasses = mentorClassRepository.findAll().stream()
-			.filter(i -> i.getMentor().getMentorId().equals(mentor.getMentorId()))
+			.filter(i -> i.getMentor().getId().equals(mentor.getId()))
 			.toList();
 
 		List<MentorClassResponse> mentorClassResponses = new ArrayList<>();

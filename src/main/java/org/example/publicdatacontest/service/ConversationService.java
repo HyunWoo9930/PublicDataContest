@@ -32,9 +32,9 @@ public class ConversationService {
 		Mentor mentor = mentorRepository.findById(mentorId).orElseThrow(() -> new NotFoundException("mentor가 없습니다."));
 		Mentee mentee = menteeRepository.findByUserId(userDetails.getUsername())
 			.orElseThrow(() -> new NotFoundException("mentee가 없거나, mentee가 아닙니다."));
-		if (conversationRepository.findByMenteeMenteeIdAndMentorMentorId(mentee.getMenteeId(), mentorId).isPresent()) {
-			Conversation conversation = conversationRepository.findByMenteeMenteeIdAndMentorMentorId(
-				mentee.getMenteeId(), mentorId).get();
+		if (conversationRepository.findByMenteeIdAndMentorId(mentee.getId(), mentorId).isPresent()) {
+			Conversation conversation = conversationRepository.findByMenteeIdAndMentorId(
+				mentee.getId(), mentorId).get();
 			return new MakeChatResponse(
 				conversation.getConversationId(),
 				true
@@ -42,7 +42,7 @@ public class ConversationService {
 		}
 		Conversation conversation = new Conversation(mentor, mentee, LocalDateTime.now());
 		Conversation save = conversationRepository.save(conversation);
-		Conversation conversation1 = conversationRepository.findById(save.getConversationId())
+		conversationRepository.findById(save.getConversationId())
 			.orElseThrow(() -> new NotFoundException("conversation이 없습니다."));
 		return new MakeChatResponse(
 			conversation.getConversationId(),

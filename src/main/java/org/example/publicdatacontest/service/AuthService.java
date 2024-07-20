@@ -90,7 +90,7 @@ public class AuthService {
 		Mentor mentor = new Mentor();
 		mentor.setUserId(signUpRequest.getUserId());
 		mentor.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
-		mentor.setMentorName(signUpRequest.getName());
+		mentor.setName(signUpRequest.getName());
 		mentor.setAddress(signUpRequest.getAddress());
 		mentor.setEmail(signUpRequest.getEmail());
 		mentor.setBirth(signUpRequest.getBirth());
@@ -119,7 +119,7 @@ public class AuthService {
 		Mentee mentee = new Mentee();
 		mentee.setUserId(signUpRequest.getUserId());
 		mentee.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
-		mentee.setMenteeName(signUpRequest.getName());
+		mentee.setName(signUpRequest.getName());
 		mentee.setAddress(signUpRequest.getAddress());
 		mentee.setEmail(signUpRequest.getEmail());
 		mentee.setBirth(signUpRequest.getBirth());

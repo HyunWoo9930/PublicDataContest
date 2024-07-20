@@ -22,7 +22,7 @@ public class ReviewResponse {
     public ReviewResponse(Review review) {
         this.reviewId = review.getReviewId();
         this.className = review.getMentorClass().getName();
-        this.menteeName = review.getMentee().getMenteeName();
+        this.menteeName = review.getMentee().getName();
         this.rating = review.getRating();
         this.comment = review.getComment();
         this.timestamp = review.getTimestamp();
