@@ -2,6 +2,7 @@ package org.example.publicdatacontest.domain.util;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.example.publicdatacontest.domain.mentee.Mentee;
 import org.example.publicdatacontest.domain.mentor.MentorClass;
@@ -9,6 +10,7 @@ import org.example.publicdatacontest.domain.mentor.MentorClass;
 import java.security.InvalidParameterException;
 import java.time.LocalDateTime;
 
+@NoArgsConstructor
 @Entity
 @Getter
 @Setter
