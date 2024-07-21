@@ -32,6 +32,11 @@ public class ReviewController {
     }
 
     @GetMapping("")
+    public ResponseEntity<?> reviewAll() {
+        return ResponseEntity.ok(reviewService.reviewList());
+    }
+
+    @GetMapping("/detail")
     public ResponseEntity<?> reviewDetail(@RequestParam(value = "reviewId") Long reviewId) {
         try {
             return ResponseEntity.ok(reviewService.reviewDetail(reviewId));

@@ -20,7 +20,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,6 +68,12 @@ public class ReviewService {
         paymentStatusHistory.setReviewCheck(false);
 
         return "review saved successfully";
+    }
+
+    public List<ReviewResponse> reviewList() {
+        return reviewRepository.findAll().stream()
+                .map(ReviewResponse::new)
+                .toList();
     }
 
     public ReviewResponse reviewDetail(Long reviewId) {
