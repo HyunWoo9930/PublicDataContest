@@ -110,4 +110,19 @@ public class ChatController {
 			return ResponseEntity.status(400).body(e.getMessage());
 		}
 	}
+
+	@PutMapping("/update_received_class_id")
+	public ResponseEntity<?> updateReceivedClassId(
+		@RequestParam(value = "paymentStatus_id") Long paymentStatusId,
+		@RequestParam(value = "class_id") Long classId
+	) {
+		try {
+			chatService.updateReceivedClassId(paymentStatusId, classId);
+			return ResponseEntity.ok("success");
+		} catch (NotFoundException e) {
+			return ResponseEntity.status(404).body(e.getMessage());
+		} catch (RuntimeException e) {
+			return ResponseEntity.status(400).body(e.getMessage());
+		}
+	}
 }

@@ -16,6 +16,7 @@ import org.example.publicdatacontest.domain.dto.responseDTO.PaymentStatusHistory
 import org.example.publicdatacontest.domain.util.PaymentStatus;
 import org.example.publicdatacontest.repository.chat.ChatRepository;
 import org.example.publicdatacontest.repository.chat.ConversationRepository;
+import org.example.publicdatacontest.repository.chat.PaymentStatusHistoryRepository;
 import org.example.publicdatacontest.repository.mentee.MenteeRepository;
 import org.example.publicdatacontest.repository.mentor.MentorRepository;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,13 +31,16 @@ public class ChatService {
 	private final MenteeRepository menteeRepository;
 	private final ConversationRepository conversationRepository;
 
+	private final PaymentStatusHistoryRepository paymentStatusHistoryRepository;
+
 	public ChatService(ChatRepository chatRepository, MentorRepository mentorRepository,
 		MenteeRepository menteeRepository,
-		ConversationRepository conversationRepository) {
+		ConversationRepository conversationRepository, PaymentStatusHistoryRepository paymentStatusHistoryRepository) {
 		this.chatRepository = chatRepository;
 		this.mentorRepository = mentorRepository;
 		this.menteeRepository = menteeRepository;
 		this.conversationRepository = conversationRepository;
+		this.paymentStatusHistoryRepository = paymentStatusHistoryRepository;
 	}
 
 	public ChatResponse makeChat(UserDetails userDetails, ChattingRequest chattingRequest) {
@@ -180,5 +184,18 @@ public class ChatService {
 		}
 
 		conversationRepository.save(conversation);
+	}
+
+	public void updateReceivedClassId(Long paymentStatusId, Long classId) {
+		PaymentStatusHistory paymentStatusHistory = paymentStatusHistoryRepository.findById(paymentStatusId)
+			.orElseThrow(() -> new NotFoundException("paymentStatus가 없습니다."));
+
+		paymentStatusHistory.getConversation().getMentor().getMentorClasses().stream()
+			.filter(mentorClass -> mentorClass.getClassId().equals(classId))
+			.findFirst()
+			.orElseThrow(() -> new NotFoundException("class가 없습니다."));
+
+		paymentStatusHistory.setRequestedClassId(classId);
+		paymentStatusHistoryRepository.save(paymentStatusHistory);
 	}
 }
