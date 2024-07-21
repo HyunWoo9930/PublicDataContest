@@ -40,7 +40,7 @@ public class ReviewController {
         }
     }
 
-    @GetMapping("/review/mentee")
+    @GetMapping("/mentee")
     public ResponseEntity<?> getReviewListOfMentee(@AuthenticationPrincipal UserDetails userDetails) {
 
         try {
@@ -50,7 +50,7 @@ public class ReviewController {
         }
     }
 
-    @GetMapping("/review/class")
+    @GetMapping("/class")
     public ResponseEntity<?> getReviewListOfClass(@RequestParam(value = "classId") Long classId) {
 
         try {

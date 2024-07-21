@@ -10,10 +10,10 @@ import org.example.publicdatacontest.domain.mentor.MentorClass;
 import java.security.InvalidParameterException;
 import java.time.LocalDateTime;
 
+@NoArgsConstructor
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
 public class Review {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
