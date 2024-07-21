@@ -58,7 +58,7 @@ public class MentorResponse {
 		this.active = mentor.getActive();
 		this.isEmailAlarmAgreed = mentor.getIsEmailAlarmAgreed();
 		this.payment = mentor.getPaymentMethod();
-		this.image = Base64.getEncoder().encodeToString(mentor.getProfilePicture());
+		this.image = mentor.getProfilePicture() != null ? Base64.getEncoder().encodeToString(mentor.getProfilePicture()) : null;
 		this.createdAt = mentor.getCreatedAt();
 		this.certificateIds = mentor.getCertificates().stream().map(MentorCertificate::getCertificateId).collect(Collectors.toSet());
 		this.badgeIds = mentor.getBadges().stream().map(MentorBadge::getBadgeId).collect(Collectors.toSet());
