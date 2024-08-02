@@ -225,4 +225,40 @@ public class AuthController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		}
 	}
+
+	@DeleteMapping("delete_user")
+	public ResponseEntity<?> deleteUser(
+		@AuthenticationPrincipal UserDetails userDetails
+	) {
+		try {
+			authService.deleteUser(userDetails);
+			return ResponseEntity.ok("success");
+		} catch (RuntimeException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		}
+	}
+
+	@PutMapping("/toggle_active")
+	public ResponseEntity<?> toggleActive(
+		@AuthenticationPrincipal UserDetails userDetails
+	) {
+		try {
+			authService.toggleActive(userDetails);
+			return ResponseEntity.ok("success");
+		} catch (RuntimeException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		}
+	}
+
+	@PutMapping("/toggle_employed_idea")
+	public ResponseEntity<?> toggleEmployedIdea(
+		@AuthenticationPrincipal UserDetails userDetails
+	) {
+		try {
+			authService.toggleEmployedIdea(userDetails);
+			return ResponseEntity.ok("success");
+		} catch (RuntimeException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		}
+	}
 }

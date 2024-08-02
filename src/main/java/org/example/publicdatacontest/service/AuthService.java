@@ -321,6 +321,34 @@ public class AuthService {
 		});
 	}
 
+	@Transactional
+	public void deleteUser(UserDetails userDetails) {
+		mentorRepository.findByUserId(userDetails.getUsername()).ifPresent(mentor -> mentorRepository.delete(mentor));
+		menteeRepository.findByUserId(userDetails.getUsername()).ifPresent(mentee -> menteeRepository.delete(mentee));
+	}
+
+	public void toggleActive(UserDetails userDetails) {
+		mentorRepository.findByUserId(userDetails.getUsername()).ifPresent(mentor -> {
+			mentor.setActive(!mentor.getActive());
+			mentorRepository.save(mentor);
+		});
+		menteeRepository.findByUserId(userDetails.getUsername()).ifPresent(mentee -> {
+			mentee.setActive(!mentee.getActive());
+			menteeRepository.save(mentee);
+		});
+	}
+
+	public void toggleEmployedIdea(UserDetails userDetails) {
+		mentorRepository.findByUserId(userDetails.getUsername()).ifPresent(mentor -> {
+			mentor.setReemploymentIdea(!mentor.getReemploymentIdea());
+			mentorRepository.save(mentor);
+		});
+		menteeRepository.findByUserId(userDetails.getUsername()).ifPresent(mentee -> {
+			mentee.setEmploymentIdea(!mentee.getEmploymentIdea());
+			menteeRepository.save(mentee);
+		});
+
+	}
 
 
 	public byte[] getProfileImageId(Long id) {

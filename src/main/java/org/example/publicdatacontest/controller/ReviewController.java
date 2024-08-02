@@ -26,10 +26,10 @@ public class ReviewController {
 
         try {
             return ResponseEntity.ok(reviewService.writeReview(request, userDetails));
-        } catch (IllegalAccessException e) {
+        } catch (IllegalAccessException | RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
-    }
+	}
 
     @GetMapping("")
     public ResponseEntity<?> reviewAll() {

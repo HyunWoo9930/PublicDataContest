@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -108,5 +109,44 @@ public class ClassController {
 	) {
 		List<MentorClassResponse> mentorClasses = classService.getMentorMentoring(userDetails);
 		return ResponseEntity.ok(mentorClasses);
+	}
+
+	@PutMapping("/toggle_mentoring")
+	public ResponseEntity<?> toggleMentoring(
+		@AuthenticationPrincipal UserDetails userDetails,
+		@RequestParam(value = "classId") Long classId
+	) {
+		try {
+			classService.toggleMentoring(userDetails, classId);
+			return ResponseEntity.ok("success");
+		} catch (RuntimeException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		}
+	}
+
+	@DeleteMapping("/delete_mentoring")
+	public ResponseEntity<?> deleteMentoring(
+		@AuthenticationPrincipal UserDetails userDetails,
+		@RequestParam(value = "classId") Long classId
+	) {
+		try {
+			classService.deleteMentoring(userDetails, classId);
+			return ResponseEntity.ok("success");
+		} catch (RuntimeException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		}
+	}
+
+	@PutMapping("/modify_mentoring")
+	public ResponseEntity<?> modifyMentoring(
+		@AuthenticationPrincipal UserDetails userDetails,
+		@Valid @RequestBody MentorClassRequest mentorClassRequest
+	) {
+		try {
+			classService.modifyMentoring(userDetails, mentorClassRequest);
+			return ResponseEntity.ok("success");
+		} catch (RuntimeException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		}
 	}
 }

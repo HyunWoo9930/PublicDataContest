@@ -169,4 +169,59 @@ public class ClassService {
 		});
 		return mentorClassResponses;
 	}
+
+	public void toggleMentoring(UserDetails userDetails, Long classId) {
+		Mentor mentor = mentorRepository.findByUserId(userDetails.getUsername())
+			.orElseThrow(() -> new RuntimeException("멘토가 아니거나, 유저가 없습니다."));
+
+		MentorClass mentorClass = mentorClassRepository.findById(classId)
+			.orElseThrow(() -> new RuntimeException("해당 클래스가 존재하지 않습니다."));
+
+		if (mentorClass.getMentor().getId().equals(mentor.getId())) {
+			mentorClass.setActive(!mentorClass.getActive());
+			mentorClassRepository.save(mentorClass);
+		} else {
+			throw new RuntimeException("해당 클래스에 대한 권한이 없습니다.");
+		}
+	}
+
+	@Transactional
+	public void deleteMentoring(UserDetails userDetails, Long classId) {
+		Mentor mentor = mentorRepository.findByUserId(userDetails.getUsername())
+			.orElseThrow(() -> new RuntimeException("멘토가 아니거나, 유저가 없습니다."));
+
+		MentorClass mentorClass = mentorClassRepository.findById(classId)
+			.orElseThrow(() -> new RuntimeException("해당 클래스가 존재하지 않습니다."));
+
+		if (mentorClass.getMentor().getId().equals(mentor.getId())) {
+			mentorClassRepository.delete(mentorClass);
+		} else {
+			throw new RuntimeException("해당 클래스에 대한 권한이 없습니다.");
+		}
+	}
+
+	public void modifyMentoring(UserDetails userDetails, MentorClassRequest mentorClassRequest) {
+		Mentor mentor = mentorRepository.findByUserId(userDetails.getUsername())
+			.orElseThrow(() -> new RuntimeException("멘토가 아니거나, 유저가 없습니다."));
+
+		MentorClass mentorClass = mentorClassRepository.findById(mentorClassRequest.getClassId())
+			.orElseThrow(() -> new RuntimeException("해당 클래스가 존재하지 않습니다."));
+
+		if (mentorClass.getMentor().getId().equals(mentor.getId())) {
+			mentorClass.setName(mentorClassRequest.getName().equals("string") ? mentorClass.getName()
+				: mentorClassRequest.getName());
+			mentorClass.setDescription(
+				mentorClassRequest.getDescription().equals("string") ? mentorClass.getDescription()
+					: mentorClassRequest.getDescription());
+			mentorClass.setLocation(mentorClassRequest.getLocation().equals("string") ? mentorClass.getLocation()
+				: mentorClassRequest.getLocation());
+			mentorClass.setTime(
+				mentorClassRequest.getTime() != 0 ? mentorClassRequest.getTime() : mentorClass.getTime());
+			mentorClass.setPrice(
+				mentorClassRequest.getPrice() != 0 ? mentorClassRequest.getPrice() : mentorClass.getPrice());
+			mentorClass.setSubCategory(mentorClassRequest.getSubcategoryId() != 0 ?
+				subCategoryRepository.findById(mentorClassRequest.getSubcategoryId())
+					.orElseThrow(() -> new RuntimeException("해당 소분류가 존재하지 않습니다.")) : mentorClass.getSubCategory());
+		}
+	}
 }

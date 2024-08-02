@@ -2,6 +2,7 @@ package org.example.publicdatacontest.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.example.publicdatacontest.domain.chat.Chat;
@@ -13,6 +14,7 @@ import org.example.publicdatacontest.domain.dto.responseDTO.ChatDetailResponse;
 import org.example.publicdatacontest.domain.dto.responseDTO.ChatResponse;
 import org.example.publicdatacontest.domain.dto.responseDTO.ConversationResponse;
 import org.example.publicdatacontest.domain.dto.responseDTO.PaymentStatusHistoryResponse;
+import org.example.publicdatacontest.domain.mentor.MentorClass;
 import org.example.publicdatacontest.domain.util.PaymentStatus;
 import org.example.publicdatacontest.repository.chat.ChatRepository;
 import org.example.publicdatacontest.repository.chat.ConversationRepository;
@@ -190,10 +192,10 @@ public class ChatService {
 		PaymentStatusHistory paymentStatusHistory = paymentStatusHistoryRepository.findById(paymentStatusId)
 			.orElseThrow(() -> new NotFoundException("paymentStatus가 없습니다."));
 
-		paymentStatusHistory.getConversation().getMentor().getMentorClasses().stream()
-			.filter(mentorClass -> mentorClass.getClassId().equals(classId))
-			.findFirst()
-			.orElseThrow(() -> new NotFoundException("class가 없습니다."));
+		Set<MentorClass> mentorClasses = paymentStatusHistory.getConversation().getMentor().getMentorClasses();
+		if (mentorClasses.stream().noneMatch(mentorClass -> mentorClass.getClassId().equals(classId))) {
+			throw new NotFoundException("class가 없습니다.");
+		}
 
 		paymentStatusHistory.setRequestedClassId(classId);
 		paymentStatusHistoryRepository.save(paymentStatusHistory);
