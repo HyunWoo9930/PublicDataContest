@@ -7,6 +7,8 @@ import lombok.Setter;
 import org.example.publicdatacontest.domain.category.SubCategory;
 import org.example.publicdatacontest.domain.mentee.MenteeClass;
 import org.example.publicdatacontest.domain.util.Review;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -33,6 +35,7 @@ public class MentorClass {
 	private Long time;
 	private Long price;
 	private String description;
+	private Long likeCount;
 
 	@ManyToOne
 	@JoinColumn(name = "subcategory_id")
@@ -54,5 +57,13 @@ public class MentorClass {
 	public void addReview(Review review) {
 		this.reviews.add(review);
 		review.setMentorClass(this);
+	}
+
+	public void likeCountUp() {
+		this.likeCount++;
+	}
+
+	public void likeCountDown() {
+		this.likeCount--;
 	}
 }

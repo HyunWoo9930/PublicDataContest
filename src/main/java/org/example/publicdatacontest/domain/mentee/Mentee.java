@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 import org.example.publicdatacontest.domain.chat.Conversation;
+import org.example.publicdatacontest.domain.util.Like;
 import org.example.publicdatacontest.domain.util.Reports;
 import org.example.publicdatacontest.domain.util.Review;
 import org.example.publicdatacontest.domain.util.User;
@@ -48,6 +49,9 @@ public class Mentee extends User {
 
 	@OneToMany(mappedBy = "mentee")
 	private Set<Review> reviews;
+
+	@OneToMany(mappedBy = "mentee")
+	private Set<Like> likes;
 
 	public Mentee() {
 

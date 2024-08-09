@@ -61,6 +61,7 @@ public class ClassService {
 		mentorClass.setLocation(mentorClassRequest.getLocation());
 		mentorClass.setTime(mentorClassRequest.getTime());
 		mentorClass.setPrice(mentorClassRequest.getPrice());
+		mentorClass.setLikeCount(0L);
 
 		System.out.println("mentor = " + mentor.get().getMentorCategories());
 
