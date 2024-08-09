@@ -224,4 +224,16 @@ public class ClassService {
 					.orElseThrow(() -> new RuntimeException("해당 소분류가 존재하지 않습니다.")) : mentorClass.getSubCategory());
 		}
 	}
+
+	public List<MentorClassResponse> searchClass(String searchKeyword) {
+		List<MentorClass> classes = mentorClassRepository.findByNameContaining(searchKeyword);
+		List<MentorClassResponse> mentorClassResponses = new ArrayList<>();
+
+		classes.forEach(mentorClass -> {
+			MentorClassResponse mentorClassResponse = new MentorClassResponse(mentorClass);
+			mentorClassResponses.add(mentorClassResponse);
+		});
+
+		return mentorClassResponses;
+	}
 }

@@ -149,4 +149,10 @@ public class ClassController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		}
 	}
+
+	@GetMapping("/search_class")
+	public ResponseEntity<?> getSearchClass(@RequestParam(value = "query") String query) {
+		List<MentorClassResponse> mentorClasses = classService.searchClass(query);
+		return ResponseEntity.ok(mentorClasses);
+	}
 }
