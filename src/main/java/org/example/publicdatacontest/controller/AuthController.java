@@ -102,8 +102,8 @@ public class AuthController {
 
 	@PutMapping("/register_pay")
 	public ResponseEntity<?> registerPay(
-		@AuthenticationPrincipal UserDetails userDetails,
-		@RequestParam(value = "payment") String payment
+			@AuthenticationPrincipal UserDetails userDetails,
+			@RequestParam(value = "payment") String payment
 	) {
 		try {
 			authService.registerPay(userDetails, payment);
@@ -115,8 +115,8 @@ public class AuthController {
 
 	@PostMapping("/report_user")
 	public ResponseEntity<?> reportUser(
-		@AuthenticationPrincipal UserDetails userDetails,
-		@RequestBody ReportUserRequest reportUserRequest
+			@AuthenticationPrincipal UserDetails userDetails,
+			@RequestBody ReportUserRequest reportUserRequest
 	) {
 		try {
 			authService.reportUser(userDetails, reportUserRequest);
@@ -128,7 +128,7 @@ public class AuthController {
 
 	@GetMapping("/id_duplicate")
 	public ResponseEntity<?> idDuplicate(
-		@RequestParam(value = "userId") String userId) {
+			@RequestParam(value = "userId") String userId) {
 		if (!authService.idDuplicateCheck(userId)) {
 			return ResponseEntity.ok("success");
 		} else {
@@ -138,7 +138,7 @@ public class AuthController {
 
 	@GetMapping("/email_duplicate")
 	public ResponseEntity<?> emailDuplicate(
-		@RequestParam(value = "email") String email) {
+			@RequestParam(value = "email") String email) {
 		if (!authService.emailDuplicateCheck(email)) {
 			return ResponseEntity.ok("success");
 		} else {
@@ -148,7 +148,7 @@ public class AuthController {
 
 	@GetMapping("/find_id")
 	public ResponseEntity<?> findId(
-		@RequestParam(value = "email") String email) {
+			@RequestParam(value = "email") String email) {
 		try {
 			String userId = authService.findId(email);
 			return ResponseEntity.ok(userId);
@@ -159,8 +159,8 @@ public class AuthController {
 
 	@PutMapping("change_password")
 	public ResponseEntity<?> changePassword(
-		@AuthenticationPrincipal UserDetails userDetails,
-		@RequestParam(value = "new_password") String password
+			@AuthenticationPrincipal UserDetails userDetails,
+			@RequestParam(value = "new_password") String password
 	) {
 		try {
 			authService.changePassword(userDetails, password);
@@ -172,9 +172,9 @@ public class AuthController {
 
 	@PutMapping(value = "/upload_profile_image", consumes = "multipart/form-data")
 	public ResponseEntity<?> uploadProfileImage(
-		@AuthenticationPrincipal UserDetails userDetails,
-		@Parameter(name = "file", description = "업로드 사진 데이터")
-		@RequestParam(value = "file") MultipartFile file
+			@AuthenticationPrincipal UserDetails userDetails,
+			@Parameter(name = "file", description = "업로드 사진 데이터")
+			@RequestParam(value = "file") MultipartFile file
 	) {
 		try {
 			authService.uploadProfileImage(userDetails, file);
@@ -186,14 +186,14 @@ public class AuthController {
 
 	@GetMapping("/get_profile_image")
 	public ResponseEntity<?> getProfileImage(
-		@AuthenticationPrincipal UserDetails userDetails
+			@AuthenticationPrincipal UserDetails userDetails
 	) {
 		try {
 			byte[] image = authService.getProfileImage(userDetails);
 			return ResponseEntity.ok()
-				.header(HttpHeaders.CONTENT_DISPOSITION,
-					"attachment; filename=\"" + userDetails.getUsername() + ".jpg\"")
-				.body(image);
+					.header(HttpHeaders.CONTENT_DISPOSITION,
+							"attachment; filename=\"" + userDetails.getUsername() + ".jpg\"")
+					.body(image);
 		} catch (RuntimeException e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		}
@@ -201,7 +201,7 @@ public class AuthController {
 
 	@DeleteMapping("/delete_profile_image")
 	public ResponseEntity<?> deleteProfileImage(
-		@AuthenticationPrincipal UserDetails userDetails
+			@AuthenticationPrincipal UserDetails userDetails
 	) {
 		try {
 			authService.deleteProfileImage(userDetails);
@@ -213,14 +213,14 @@ public class AuthController {
 
 	@GetMapping("get_profile_by_id")
 	public ResponseEntity<?> getProfileById(
-		@RequestParam(value = "user_id") Long user_id
+			@RequestParam(value = "user_id") Long user_id
 	) {
 		try {
 			byte[] image = authService.getProfileImageId(user_id);
 			return ResponseEntity.ok()
-				.header(HttpHeaders.CONTENT_DISPOSITION,
-					"attachment; filename=\"" + user_id + ".jpg\"")
-				.body(image);
+					.header(HttpHeaders.CONTENT_DISPOSITION,
+							"attachment; filename=\"" + user_id + ".jpg\"")
+					.body(image);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		}
@@ -228,7 +228,7 @@ public class AuthController {
 
 	@DeleteMapping("delete_user")
 	public ResponseEntity<?> deleteUser(
-		@AuthenticationPrincipal UserDetails userDetails
+			@AuthenticationPrincipal UserDetails userDetails
 	) {
 		try {
 			authService.deleteUser(userDetails);
@@ -240,7 +240,7 @@ public class AuthController {
 
 	@PutMapping("/toggle_active")
 	public ResponseEntity<?> toggleActive(
-		@AuthenticationPrincipal UserDetails userDetails
+			@AuthenticationPrincipal UserDetails userDetails
 	) {
 		try {
 			authService.toggleActive(userDetails);
@@ -252,7 +252,7 @@ public class AuthController {
 
 	@PutMapping("/toggle_employed_idea")
 	public ResponseEntity<?> toggleEmployedIdea(
-		@AuthenticationPrincipal UserDetails userDetails
+			@AuthenticationPrincipal UserDetails userDetails
 	) {
 		try {
 			authService.toggleEmployedIdea(userDetails);

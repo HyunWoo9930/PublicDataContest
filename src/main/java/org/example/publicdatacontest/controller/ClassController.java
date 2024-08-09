@@ -5,6 +5,7 @@ import java.util.List;
 import org.example.publicdatacontest.domain.dto.requestDTO.MentorClassRequest;
 import org.example.publicdatacontest.domain.dto.responseDTO.MentorClassResponse;
 import org.example.publicdatacontest.service.ClassService;
+import org.example.publicdatacontest.service.LikeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

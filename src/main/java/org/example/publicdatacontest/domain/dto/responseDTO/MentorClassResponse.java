@@ -21,6 +21,7 @@ public class MentorClassResponse {
 	private String description;
 	private Boolean active;
 	private LocalDateTime createdAt;
+	private Long likeCount;
 
 	public MentorClassResponse(MentorClass mentorClass) {
 		this.classId = mentorClass.getClassId();
@@ -35,5 +36,6 @@ public class MentorClassResponse {
 		this.description = mentorClass.getDescription();
 		this.active = mentorClass.getActive();
 		this.createdAt = mentorClass.getCreatedAt();
+		this.likeCount = mentorClass.getLikeCount();
 	}
 }
